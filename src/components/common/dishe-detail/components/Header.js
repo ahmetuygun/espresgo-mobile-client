@@ -77,11 +77,6 @@ class Header extends Component<Props, State> {
       imageURL,
     } = this.props;
 
-    const isDishDetailInReviewMode = navigation.getParam(
-      CONSTANTS.NAVIGATION_PARAM_IS_DISH_DETAIL_REVIEW_MODE,
-      false,
-    );
-
     return (
       <Fragment>
         <ImageWrapper>
@@ -94,13 +89,6 @@ class Header extends Component<Props, State> {
           </DishImageWrapper>
           <SmokeShadow />
         </ImageWrapper>
-        {isDishDetailInReviewMode && (
-          <SeeRestaurantButtonWrapper>
-            <SeeRestaurantButton
-              restaurantId={restaurantId}
-            />
-          </SeeRestaurantButtonWrapper>
-        )}
       </Fragment>
     );
   }

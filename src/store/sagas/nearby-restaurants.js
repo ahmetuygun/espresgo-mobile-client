@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 
 import { Creators as NearbyRestaurantsActions } from '~/store/ducks/nearby-restaurants';
-import api from '~/services/api';
+import { api } from '~/services/api';
 
 export function* requestNearbyRestaurants(action) {
   try {

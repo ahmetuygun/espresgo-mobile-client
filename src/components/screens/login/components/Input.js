@@ -25,8 +25,8 @@ const InputIcon = styled(Icon).attrs(({ iconName }) => ({
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 
-const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme }) => ({
-  placeholderTextColor: theme.colors.transparentGrayx,
+const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme,onChange,name, value,placeholderTextColor }) => ({
+  placeholderTextColor: placeholderTextColor,
   selectionColor: theme.colors.defaultWhite,
   underlineColorAndroid: 'transparent',
   secureTextEntry: type === 'password',
@@ -34,6 +34,9 @@ const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme }) => ({
   textContentType: type,
   autoCorrect: false,
   placeholder,
+  onChangeText : (value) => onChange(name, value),
+  value : {value},
+
 }))`
   width: 90%;
   height: 100%;
@@ -41,13 +44,16 @@ const CustomInput = styled(TextInput).attrs(({ placeholder, type, theme }) => ({
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 
+
 type InputProps = {
   placeholder: string,
   iconName: string,
   type: string,
+  onChange : function,
+  name : string
 };
 
-const Input = ({ placeholder, iconName, type }: InputProps): Object => (
+const Input = ({ placeholder, iconName, type, onChange, name, value, placeholderTextColor }: InputProps): Object => (
   <ContentContainer
     color={appStyles.colors.transparentGray}
   >
@@ -58,6 +64,10 @@ const Input = ({ placeholder, iconName, type }: InputProps): Object => (
       <CustomInput
         placeholder={placeholder}
         type={type}
+        onChange = {onChange}
+        name = {name}
+        value = {value}
+        placeholderTextColor = {placeholderTextColor}
       />
     </InputWrapper>
   </ContentContainer>

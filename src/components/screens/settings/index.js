@@ -8,10 +8,12 @@ import {
   Switch,
   Text,
   View,
+  AsyncStorage,
 } from 'react-native';
 
 import styled from 'styled-components';
 import appStyle from '~/styles';
+import { ROUTE_NAMES } from '~/routes/index';
 
 import {
   getItemFromStorage,
@@ -19,6 +21,8 @@ import {
 } from '~/utils/AsyncStoarageManager';
 
 import { SWITCH_STATE_REFS, getItemConfig, TYPES } from './ItemConfig';
+import ButtonContent from '../login/components/ButtonContent';
+import { DefaultText } from '../login/components/Common';
 
 const Container = styled(View)`
   flex: 1;
@@ -97,9 +101,7 @@ const OptionWithouDescriptionWrapper = styled(View)`
 `;
 
 const MultipleOptionsTitleWrapper = styled(View)`
-  padding: ${({ theme }) => `${theme.metrics.largeSize}px 0 ${theme.metrics.mediumSize}px ${
-    theme.metrics.largeSize
-  }px`};
+  padding: ${({ theme }) => `${theme.metrics.largeSize}px 0 ${theme.metrics.mediumSize}px ${theme.metrics.largeSize}px`};
 `;
 
 type State = {
@@ -226,6 +228,29 @@ class Settings extends Component<{}, State> {
       </ItemWrapper>
     );
   };
+  async removeItemValue(key) {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (exception) {
+      return false;
+    }
+  }
+  signOut(a) {
+    this.removeItemValue('accessToken');
+    this.removeItemValue('splashScreen');
+    const { navigation } = this.props;
+    navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO);
+  }
+
+  renderSignOutButton = () => (
+    <ButtonContent
+      color={appStyle.colors.primaryColor}
+      onPress={a => this.signOut(a)}
+    >
+      <DefaultText>Çıkış Yap</DefaultText>
+    </ButtonContent>
+  );
 
   renderItemWithoutDescription = (type: string): Object => {
     const config = getItemConfig(type);
@@ -257,6 +282,8 @@ class Settings extends Component<{}, State> {
           {this.renderItemWithoutDescription(TYPES.RECEIVE_ALL_NOTIFICATIONS)}
           {this.renderItemWithoutDescription(TYPES.WHEN_PAST_SEARCH)}
           {this.renderItemWithoutDescription(TYPES.WHEN_ABOUT_DISCOUNTS)}
+
+          {this.renderSignOutButton()}
         </ScrollView>
       </Container>
     );

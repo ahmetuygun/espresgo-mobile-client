@@ -10,10 +10,10 @@ export const DefaultText = styled(Text)`
 
 export const ContentContainer = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('7%')}px;
+  height: ${({ theme }) => theme.metrics.getHeightFromDP('6%')}px;
   justify-content: center;
   align-items: center;
-  margin-bottom: ${({ theme }) => theme.metrics.largeSize}px;
+  margin-bottom: ${({ theme }) => theme.metrics.smallSize}px;
   background-color: ${({ color }) => color};
   border-radius: 4px;
 `;

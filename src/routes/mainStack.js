@@ -2,17 +2,17 @@
 
 import React from 'react';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   createMaterialTopTabNavigator,
   createAppContainer,
 } from 'react-navigation';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import SearchRestaurantsRoutes from '~/components/screens/search-restaurants/routes';
-import NearYouRoutes from '~/components/screens/near-you/routes';
-import ProfileRoutes from '~/components/screens/profile/routes';
-import Settings from '~/components/screens/settings/routes';
 import HomeRoutes from '~/components/screens/home/routes';
+import AddressRoutes from '~/components/screens/adress/routes';
+import OrdersRoutes from '~/components/screens/orders/routes';
+import NearYouRoutes from '~/components/screens/near-you/routes';
+import AdminsRoutes from '~/components/screens/admin/routes';
 
 import isEqualsOrLargestThanIphoneX from '~/utils/isEqualsOrLargestThanIphoneX';
 import appStyles from '~/styles';
@@ -21,8 +21,10 @@ export const ROUTE_NAMES = {
   HOME: 'HOME',
   SEARCH_RESTAURANTS: 'SEARCH_RESTAURANTS',
   NEAR_YOU: 'NEAR_YOU',
-  PROFILE: 'PROFILE',
+  ADDRESS: 'ADDRESS',
   SETTINGS: 'SETTINGS',
+  ORDERS: 'ORDERS',
+  ADMIN: 'ADMIN',
 };
 
 type Props = {
@@ -45,10 +47,10 @@ const ApplicationTabs = createMaterialTopTabNavigator(
         tabBarIcon: getTabIcon('home'),
       },
     },
-    [ROUTE_NAMES.SEARCH_RESTAURANTS]: {
-      screen: SearchRestaurantsRoutes,
+    [ROUTE_NAMES.ORDERS]: {
+      screen: OrdersRoutes,
       navigationOptions: {
-        tabBarIcon: getTabIcon('magnify'),
+        tabBarIcon: getTabIcon('basket'),
       },
     },
     [ROUTE_NAMES.NEAR_YOU]: {
@@ -57,16 +59,16 @@ const ApplicationTabs = createMaterialTopTabNavigator(
         tabBarIcon: getTabIcon('map'),
       },
     },
-    [ROUTE_NAMES.PROFILE]: {
-      screen: ProfileRoutes,
+    [ROUTE_NAMES.ADDRESS]: {
+      screen: AddressRoutes,
       navigationOptions: {
-        tabBarIcon: getTabIcon('account'),
+        tabBarIcon: getTabIcon('account-settings'),
       },
     },
-    [ROUTE_NAMES.SETTINGS]: {
-      screen: Settings,
+    [ROUTE_NAMES.ADMIN]: {
+      screen: AdminsRoutes,
       navigationOptions: {
-        tabBarIcon: getTabIcon('settings'),
+        tabBarIcon: getTabIcon('account-settings'),
       },
     },
   },

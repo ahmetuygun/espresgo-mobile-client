@@ -13,9 +13,8 @@ export const TYPES = {
 
 const CONFIGS = {
   [TYPES.ERROR_SERVER_CONNECTION]: {
-    middleText:
-      'Seems like that we had some trouble with your connection with the Server.',
-    bottomText: 'Try again later.',
+    middleText: 'İnternetinde bir sorun var.',
+    bottomText: 'Daha sonra tekrar deneyebilir misin?.',
     iconName: 'server-network-off',
     topText: 'Oops...',
   },

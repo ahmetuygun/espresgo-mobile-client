@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment } from 'react';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, View, ScrollView } from 'react-native';
 
 import { withNavigation } from 'react-navigation';
 import styled from 'styled-components';
@@ -19,19 +19,27 @@ const Container = styled(View)`
 
 type Props = {
   navigation: Function,
-  dishDetail: Object,
+  coffeeDetail: Object,
   loading: Object,
   error: Object,
 };
 
 const DishDetail = ({
   navigation,
-  dishDetail,
+  coffeeDetail,
   loading,
   error,
+  onSelectionChanced,
+  selectedValue,
+  totalPrice,
+  orderAction,
+  snackbarVisible,
+  onSnackbarAction,
+  onSnackBarDismis,
+  amountChanged,
+  productAmount,
 }: Props): Object => {
-  const shouldShowContent = Object.keys(dishDetail).length > 0 && !loading && !error;
-
+  const shouldShowContent = Object.keys(coffeeDetail).length > 0 && !loading && !error;
   return (
     <Fragment>
       <StatusBar
@@ -50,13 +58,22 @@ const DishDetail = ({
       {shouldShowContent && (
         <Container>
           <Header
-            thumbnailImageURL={dishDetail.dish.thumbnailImageURL}
-            restaurantId={dishDetail.restaurant.id}
-            imageURL={dishDetail.dish.imageURL}
-            navigation={navigation}
+            thumbnailImageURL={coffeeDetail.image}
+            restaurantId={coffeeDetail.id}
+            imageURL={coffeeDetail.image}
+            navigation={coffeeDetail}
           />
           <Card
-            dishDetail={dishDetail}
+            coffeeDetail={coffeeDetail}
+            onSelectionChanced={onSelectionChanced}
+            selectedValue={selectedValue}
+            totalPrice={totalPrice}
+            orderAction={orderAction}
+            snackbarVisible={snackbarVisible}
+            onSnackbarAction={onSnackbarAction}
+            onSnackBarDismis={onSnackBarDismis}
+            amountChanged={amountChanged}
+            productAmount={productAmount}
           />
         </Container>
       )}

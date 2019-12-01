@@ -21,22 +21,13 @@ type Props = {
   error: boolean,
 };
 
-const AllYouMightLike = ({
-  isDishesEmpty,
-  loading,
-  dishes,
-  error,
-}: Props): Object => {
-  const shouldRenderContent = !isDishesEmpty && !loading && !error;
-
+const AllYouMightLike = ({ loading, coffee, error }: Props): Object => {
+  const shouldRenderContent = !loading && !error;
   return (
     <Wrapper>
       {loading && <Loading />}
       {error && <Alert
         type={TYPES.ERROR_SERVER_CONNECTION}
-      />}
-      {isDishesEmpty && <Alert
-        type={TYPES.POPULAR_EMPTY}
       />}
       {shouldRenderContent && (
         <FlatList
@@ -44,15 +35,14 @@ const AllYouMightLike = ({
             <PopularSeeAllItemList
               price={parseFloat(item.price).toFixed(2)}
               description={item.description}
-              imageURL={item.mediumImageURL}
+              imageURL={item.image}
               title={item.title}
-              stars={item.stars}
               id={item.id}
             />
           )}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id}
-          data={dishes}
+          data={coffee.list}
         />
       )}
     </Wrapper>

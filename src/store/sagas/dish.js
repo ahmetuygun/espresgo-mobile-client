@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 
 import { Creators as DishActions } from '~/store/ducks/dish';
-import api from '~/services/api';
+import { api } from '~/services/api';
 
 export function* requestDishDetail(action) {
   try {

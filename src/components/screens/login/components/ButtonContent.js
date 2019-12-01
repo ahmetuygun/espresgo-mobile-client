@@ -13,9 +13,14 @@ type Props = {
   color: string,
 };
 
-const ButtonContent = ({ navigation, children, color }: Props): Object => (
+const ButtonContent = ({
+  onPress,
+  navigation,
+  children,
+  color,
+}: Props): Object => (
   <TouchableOpacity
-    onPress={() => navigation.navigate(ROUTE_NAMES.MAIN_STACK)}
+    onPress={onPress}
   >
     <ContentContainer
       color={color}

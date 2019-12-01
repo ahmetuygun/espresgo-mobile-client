@@ -4,36 +4,35 @@ import React, { Component } from 'react';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Creators as DishCreators } from '~/store/ducks/dish';
+import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
 
 import SeeAllPopular from './SeeAllPopular';
 
 type Props = {
-  requestAllDishes: Function,
-  dish: Object,
+  requestCoffee: Function,
+  coffee: Object,
 };
 
 class SeeAllPopularContainer extends Component<Props, {}> {
   componentDidMount() {
-    const { requestAllDishes } = this.props;
+    const { requestCoffee } = this.props;
 
-    requestAllDishes();
+    requestCoffee();
   }
 
   render() {
-    const { dish } = this.props;
-
+    const { coffee } = this.props;
     return <SeeAllPopular
-      {...dish}
+      {...coffee}
     />;
   }
 }
 
 const mapStateToProps = state => ({
-  dish: state.dish,
+  coffee: state.coffee,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators(DishCreators, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(CoffeeCreators, dispatch);
 
 export default connect(
   mapStateToProps,

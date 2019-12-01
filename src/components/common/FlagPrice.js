@@ -6,10 +6,10 @@ import { View, Text } from 'react-native';
 import styled from 'styled-components';
 
 const Wrapper = styled(View)`
-  background-color: ${({ theme }) => theme.colors.red};
+  background-color: ${({ theme }) => theme.colors.primaryColor};
   justify-content: center;
   align-items: center;
-  border-radius: 50px;
+  border-radius: 10px;
 `;
 
 const Price = styled(Text)`
@@ -25,7 +25,7 @@ type Props = {
 
 const PriceFlag = ({ price }: Props): Object => (
   <Wrapper>
-    <Price>{`$ ${parseFloat(price).toFixed(2)}`}</Price>
+    <Price>{`${parseFloat(price).toFixed(2)} TL`}</Price>
   </Wrapper>
 );
 

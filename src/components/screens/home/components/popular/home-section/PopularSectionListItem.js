@@ -11,7 +11,6 @@ import { withNavigation } from 'react-navigation';
 import styled from 'styled-components';
 
 import { ROUTE_NAMES } from '~/components/screens/home/routes';
-import ReviewStars from '~/components/common/ReviewStars';
 import FlagPrice from '~/components/common/FlagPrice';
 import CONSTANTS from '~/utils/CONSTANTS';
 
@@ -110,7 +109,7 @@ class PopularSectionListItem extends Component<Props, State> {
   };
 
   renderBottomContent = () => {
-    const { title, stars, price } = this.props;
+    const { title, price } = this.props;
 
     return (
       <Fragment>
@@ -123,13 +122,6 @@ class PopularSectionListItem extends Component<Props, State> {
         </DarkLayer>
         <BottomWrapper>
           <DisheTitle>{title}</DisheTitle>
-          <ReviewStars
-            shouldShowReviewsText={false}
-            textColor="white"
-            isSmall={false}
-            stars={stars}
-            reviews={0}
-          />
         </BottomWrapper>
       </Fragment>
     );

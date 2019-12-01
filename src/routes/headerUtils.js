@@ -80,7 +80,7 @@ export const setHiddenHeaderLayout = (navigation: Object): Object => {
   const props = getHiddenProps(navigation);
 
   return {
-    headerTintColor: appStyles.colors.defaultWhite,
+    headerTintColor: appStyles.colors.red,
     ...props,
     headerBackTitle: null,
     ...Platform.select({
@@ -103,7 +103,7 @@ export const setDefaultHeaderLayout = (
   headerTitleStyle: {
     fontSize: fontSize || appStyles.metrics.navigationHeaderFontSize,
     color: appStyles.colors.defaultWhite,
-    fontWeight: undefined,
+    fontWeight: 'bold',
     fontFamily,
   },
   headerTintColor: appStyles.colors.defaultWhite,

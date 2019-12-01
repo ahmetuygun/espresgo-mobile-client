@@ -21,7 +21,7 @@ const RootStack = createStackNavigator(
   {
     [ROUTE_NAMES.NEAR_YOU]: {
       screen: NearYou,
-      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Near You'),
+      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Neredeyiz'),
     },
 
     [CONSTANTS.ROUTE_RESTAURANT_ADDRESS_MAP]: {

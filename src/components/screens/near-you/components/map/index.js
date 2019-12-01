@@ -93,41 +93,26 @@ class Map extends Component<Props, {}> {
     onSelectMarker: Function,
   ): Object => (
     <Fragment>
-      {markers.map((marker, index) => {
-        const { location, name, id } = marker;
-
-        const iconName = id === 'user-location' ? 'account-location' : 'map-marker-radius';
-
-        return (
-          <Marker
-            ref={(markerRef) => {
-              this._markersRefs[index] = markerRef;
-            }}
-            onPress={() => id !== 'user-location' && onSelectMarker(index)}
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            title={name}
-            key={id}
-          >
-            <MarkerWrapper>
-              <CustomMarker
-                name={iconName}
-              />
-              {Platform.OS === 'android' && (
-                <Callout
-                  style={{ flex: 1, position: 'relative' }}
-                >
-                  <AndroidCallout
-                    restaurantName={name}
-                  />
-                </Callout>
-              )}
-            </MarkerWrapper>
-          </Marker>
-        );
-      })}
+      <Marker
+        ref={(markerRef) => {
+          this._markersRefs[0] = markerRef;
+        }}
+        coordinate={{
+          latitude: 40.96299381,
+          longitude: 29.06452685,
+        }}
+      >
+        <MarkerWrapper>
+          <CustomMarker
+            name="account-location"
+          />
+          {Platform.OS === 'android' && (
+            <Callout
+              style={{ flex: 1, position: 'relative' }}
+            />
+          )}
+        </MarkerWrapper>
+      </Marker>
     </Fragment>
   );
 
@@ -156,7 +141,7 @@ class Map extends Component<Props, {}> {
         initialRegion={initialRegion}
         rotateEnabled={false}
       >
-        {markers.length > 0 && this.renderMarkers(markers, onSelectMarker)}
+        {this.renderMarkers(markers, onSelectMarker)}
       </MapContainer>
     );
   }

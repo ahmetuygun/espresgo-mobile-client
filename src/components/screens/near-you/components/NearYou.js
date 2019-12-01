@@ -67,24 +67,7 @@ const NearYou = ({
             userLocation={userLocation}
             restaurants={restaurants}
           />
-          {restaurants.length > 0 && (
-            <RestaurantsList
-              turnOffMoveRestaurantList={turnOffMoveRestaurantList}
-              shouldMoveRestaurantList={shouldMoveRestaurantList}
-              indexRestaurantSelected={indexRestaurantSelected}
-              onSelectMarker={onSelectMarker}
-              restaurants={restaurants}
-            />
-          )}
         </ContentContainer>
-        <CustomTabWrapper>
-          <CustomTab
-            onChangeMenuIndex={index => onDishesTypeChange(index)}
-            contentWidth={appStyles.metrics.width}
-            data={dishesTypesItems}
-            theme="red"
-          />
-        </CustomTabWrapper>
       </Fragment>
     )}
   </Container>

@@ -9,6 +9,7 @@ import PopularSectionListItem from './PopularSectionListItem';
 const Container = styled(View)`
   justify-content: space-between;
   width: 100%;
+  padding-top: 15px;
 `;
 
 const ListWrapper = styled(View)`
@@ -17,26 +18,25 @@ const ListWrapper = styled(View)`
 `;
 
 type Props = {
-  dishes: Array<Object>,
+  coffee: Array<Object>,
 };
 
-const PopularSection = ({ dishes }: Props): Object => (
+const PopularSection = ({ coffee }: Props): Object => (
   <Container>
     <ListWrapper>
       <FlatList
         renderItem={({ item, index }) => (
           <PopularSectionListItem
-            imageURL={item.mediumImageURL}
+            imageURL={item.image}
             isFirst={index === 0}
             price={item.price}
-            stars={item.stars}
             title={item.title}
             id={item.id}
           />
         )}
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id}
-        data={dishes}
+        data={coffee.list}
         horizontal
       />
     </ListWrapper>

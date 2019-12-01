@@ -30,12 +30,7 @@ const RootStack = createStackNavigator(
   {
     [ROUTE_NAMES.HOME]: {
       screen: Home,
-      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(
-        navigation,
-        'Bon Appetit!',
-        'Modesta-Script',
-        27,
-      ),
+      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'espresgo', 'arial', 20),
     },
 
     [ROUTE_NAMES.SEE_ALL_EVENTS]: {
@@ -50,7 +45,7 @@ const RootStack = createStackNavigator(
 
     [ROUTE_NAMES.POPULAR_SEE_ALL]: {
       screen: PopularSeeAll,
-      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Popular'),
+      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Tüm Liste'),
     },
 
     [ROUTE_NAMES.EVENT_DETAILS]: {

@@ -33,7 +33,7 @@ const ContentWrapper = styled(View)`
   height: 100%;
   padding-horizontal: ${({ theme }) => 2 * theme.metrics.extraLargeSize}px;
 `;
-
+('');
 const DarkLayer = styled(View)`
   width: 100%;
   height: 100%;
@@ -41,7 +41,7 @@ const DarkLayer = styled(View)`
 `;
 
 const Title = styled(Text)`
-  font-family: Modesta-Script;
+  font-family: Courier New;
   color: ${({ theme }) => theme.colors.defaultWhite};
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('11.5%')}px;
 `;
@@ -54,7 +54,7 @@ const TitleWrapper = styled(View)`
 `;
 
 const BackgroundImage = styled(Image).attrs({
-  source: { uri: 'login' },
+  source: require('./loginimg2.jpg'),
   resizeMode: 'cover',
 })`
   position: absolute;
@@ -127,7 +127,10 @@ class Login extends Component {
 
         return (
           <ContentWrapper>
-            <Layout />
+            <Layout
+              onClickLoginButton={this.onClickLoginButton}
+              onClickSignUpButton={this.onClickSignUpButton}
+            />
           </ContentWrapper>
         );
       }}
@@ -161,7 +164,7 @@ class Login extends Component {
         {isBackgroundImageLoaded && (
           <Wrapper>
             <TitleWrapper>
-              <Title>Bon Appetit!</Title>
+              <Title>espresgo</Title>
             </TitleWrapper>
             <NavigationTitleWrapper>
               <TouchableOpacity
@@ -188,7 +191,7 @@ class Login extends Component {
                     }),
                   }}
                 >
-                  Login
+                  Giriş
                 </Animated.Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -215,7 +218,7 @@ class Login extends Component {
                     }),
                   }}
                 >
-                  Sign Up
+                  Yeni Kullanıcı
                 </Animated.Text>
               </TouchableOpacity>
             </NavigationTitleWrapper>

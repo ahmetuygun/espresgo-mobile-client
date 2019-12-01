@@ -1954,7 +1954,7 @@ DEFINE_CHECK_STROP_IMPL(CHECK_STRCASENE, strcasecmp, false)
 #undef DEFINE_CHECK_STROP_IMPL
 
 int posix_strerror_r(int err, char *buf, size_t len) {
-  // Sanity check input parameters
+  // Sanity check *.js parameters
   if (buf == NULL || len <= 0) {
     errno = EINVAL;
     return -1;

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { TouchableOpacity, Animated, View } from 'react-native';
+import {TouchableOpacity, Animated, View, Text} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
@@ -9,34 +9,26 @@ import styled from 'styled-components';
 import ButtonContent from './ButtonContent';
 import { DefaultText } from './Common';
 import Input from './Input';
+import { ROUTE_NAMES } from '~/routes';
+
+
+import { Alert, TYPES } from '~/components/common/alert';
+import Loading from '~/components/common/Loading';
 
 import appStyles from '~/styles';
+import {bindActionCreators} from "redux";
+import { connect } from 'react-redux';
+import { Creators as LoginCreators } from '~/store/ducks/login';
+import {withNavigation} from "react-navigation";
+import Dialog, {DialogContent, DialogTitle} from "react-native-popup-dialog";
+
 
 const Container = styled(View)`
   width: 100%;
   height: 100%;
 `;
 
-const ButtonIcon = styled(Icon).attrs(({ iconName }) => ({
-  name: iconName,
-  size: 24,
-}))`
-  color: ${({ theme }) => theme.colors.defaultWhite};
-  margin-left: ${({ iconName }) => (iconName === 'facebook' ? -4 : 0)}px;
-`;
 
-const SocialButtonWrapper = styled(View)`
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  padding-horizontal: ${({ theme }) => theme.metrics.largeSize}px;
-`;
-
-const SocialButtonsContainer = styled(View)`
-  height: 50%;
-  justify-content: flex-end;
-`;
 
 const ForgotPasswordContainer = styled(Animated.View)`
   width: 100%;
@@ -68,7 +60,7 @@ const createAnimationStyle = (animation: Object): Object => {
   };
 };
 
-class LoginComponent extends Component {
+class LoginComponent extends Component<Props, State> {
   _emailInputFieldAnimation = new Animated.Value(0);
   _passwordInputFieldAnimation = new Animated.Value(0);
   _loginButtonAnimation = new Animated.Value(0);
@@ -76,7 +68,109 @@ class LoginComponent extends Component {
   _loginGooglePlusButtonAnimation = new Animated.Value(0);
   _forgotPasswordTextAnimation = new Animated.Value(0);
 
+
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+
+
+    this.state = {
+      user: {
+        value : '',
+        placeHolder : '',
+        placeHolderColor: 'aliceblue',
+        valid : true
+      },
+      password: {
+        value : '',
+        placeHolder : '',
+        placeHolderColor: 'aliceblue',
+        valid : true
+      },
+      dialogVisible : false,
+      loading : false,
+      error : false,
+
+    }}
+
+  onChange(n,v) {
+
+    if(n === 'email') {
+      this.setState({
+        user: {
+          value : v
+        }
+      })
+    }
+
+    if(n === 'password') {
+      this.setState({
+        password: {
+          value : v
+        }
+      })
+    }
+  }
+
+  validateField = () =>{
+
+      this.setState({
+        user: {
+          ...this.state.user,
+          placeHolderColor: this.state.user.value === '' ? 'tomato' : 'aliceblue' ,
+          valid: this.state.user.value !== ''
+        },
+        password: {
+          ...this.state.password,
+          placeHolderColor:  this.state.password.value === '' ? 'tomato' : 'aliceblue',
+          valid:  this.state.password.value !== ''
+        }
+      }, () => this.handleLogin(this.state.user, this.state.password));
+
+  }
+
+
+
+  handleLogin= (user,pass) =>{
+
+
+    if(user.valid === true && pass.valid === true){
+        const { loginRequest } = this.props;
+        loginRequest(user.value, pass.value)
+      }
+
+    }
+
+  componentWillReceiveProps(nextProps){
+    const { authenticated, loading, error } = nextProps.login;
+    const { navigation  } = this.props;
+    this.setState({
+      loading : loading,
+    })
+
+    if(authenticated){
+      this.setState({dialogVisible: false})
+      navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
+    }else if(nextProps.login && nextProps.login.message && nextProps.login.message.payload.data.response){
+      const { data  } = nextProps.login.message.payload.data.response;
+      console.log(data.message)
+      this.setState(
+        {
+          dialogVisible: true,
+          user: {
+            value : ''
+          },
+          password: {
+            value : ''
+          }
+        }
+        )
+    }
+  }
+
   componentDidMount() {
+
     Animated.stagger(100, [
       Animated.timing(this._emailInputFieldAnimation, {
         toValue: 1,
@@ -110,12 +204,18 @@ class LoginComponent extends Component {
     iconName: string,
     type: string,
     style: Object,
+    onChange : function,
+    name : string,
+    placeholderTextColor : string
   ): Object => (
     <Input
       placeholder={placeholder}
       iconName={iconName}
       style={style}
       type={type}
+      onChange={this.onChange}
+      name={name}
+      placeholderTextColor ={placeholderTextColor}
     />
   );
 
@@ -129,12 +229,11 @@ class LoginComponent extends Component {
         style={forgotPasswordTextAnimationStyle}
       >
         <ForgotPasswordWrapper>
-          <DefaultText>Forgot your Password?</DefaultText>
           <RecoverTextButton>
             <DefaultText
               color={appStyles.colors.primaryColor}
             >
-              Recover here
+              Şifremi unuttum
             </DefaultText>
           </RecoverTextButton>
         </ForgotPasswordWrapper>
@@ -142,56 +241,11 @@ class LoginComponent extends Component {
     );
   };
 
-  renderSocialButton = (text: string, icon: string, color: string): Object => (
-    <ButtonContent
-      color={color}
-    >
-      <SocialButtonWrapper>
-        <ButtonIcon
-          iconName={icon}
-        />
-        <DefaultText>{text}</DefaultText>
-        <View />
-      </SocialButtonWrapper>
-    </ButtonContent>
-  );
 
-  renderSocialButtons = (): Object => {
-    const loginFacebookButtonAnimationStyle = createAnimationStyle(
-      this._loginFacebookButtonAnimation,
-    );
 
-    const loginGooglePlusButtonAnimationStyle = createAnimationStyle(
-      this._loginGooglePlusButtonAnimation,
-    );
 
-    return (
-      <SocialButtonsContainer>
-        <Animated.View
-          style={loginFacebookButtonAnimationStyle}
-        >
-          {this.renderSocialButton(
-            'Login with Facebook',
-            'facebook',
-            appStyles.colors.facebook,
-            this._loginFacebookButtonAnimation,
-          )}
-        </Animated.View>
-        <Animated.View
-          style={loginGooglePlusButtonAnimationStyle}
-        >
-          {this.renderSocialButton(
-            'Login with Google+',
-            'google-plus',
-            appStyles.colors.googlePlus,
-            this._loginGooglePlusButtonAnimation,
-          )}
-        </Animated.View>
-      </SocialButtonsContainer>
-    );
-  };
+  renderMainContent = () => {
 
-  render() {
     const emailAnimationStyle = createAnimationStyle(
       this._emailInputFieldAnimation,
     );
@@ -212,16 +266,22 @@ class LoginComponent extends Component {
             'email-outline',
             'emailAddress',
             emailAnimationStyle,
+            this.onChange(),
+            'email',
+            this.state.user.placeHolderColor
           )}
         </Animated.View>
         <Animated.View
           style={passwordAnimationStyle}
         >
           {this.renderInput(
-            'Password',
+            'Şifre',
             'lock-outline',
             'password',
             passwordAnimationStyle,
+            this.onChange(),
+            'password',
+            this.state.password.placeHolderColor
           )}
         </Animated.View>
         <Animated.View
@@ -229,15 +289,52 @@ class LoginComponent extends Component {
         >
           <ButtonContent
             color={appStyles.colors.primaryColor}
+            onPress = {(a) =>  {this.validateField()}}
           >
-            <DefaultText>LOGIN</DefaultText>
+            <DefaultText>Giriş</DefaultText>
           </ButtonContent>
         </Animated.View>
         {this.renderForgotPasswordText()}
-        {this.renderSocialButtons()}
+
+        <Dialog
+          visible={this.state.dialogVisible}
+          dialogTitle={<DialogTitle title="Hata!" />}
+          onTouchOutside={() => {
+            this.setState({dialogVisible: false});
+          }}
+        >
+          <DialogContent>
+            <Text numberOfLines={5}>
+              Kullanıcı adı veya şifre hatalı!
+            </Text>
+          </DialogContent>
+        </Dialog>
+
       </Container>
     );
-  }
 }
 
-export default LoginComponent;
+
+render() {
+  return (
+    <View>
+      {this.state.loading && <Loading />}
+      {this.state.error && <Alert
+        type={TYPES.ERROR_SERVER_CONNECTION}
+      />}
+      {!this.state.loading && !this.state.error && this.renderMainContent()}
+    </View>
+  );
+}
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators(LoginCreators, dispatch);
+
+const mapStateToProps = state => ({
+  login: state.login,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withNavigation(LoginComponent));

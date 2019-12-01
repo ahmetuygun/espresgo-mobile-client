@@ -17,9 +17,7 @@ const HeaderWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => `${theme.metrics.largeSize}px ${theme.metrics.smallSize}px ${
-    theme.metrics.extraSmallSize
-  }px  ${theme.metrics.largeSize}px`};
+  padding: ${({ theme }) => `${theme.metrics.largeSize}px ${theme.metrics.smallSize}px ${theme.metrics.extraSmallSize}px  ${theme.metrics.largeSize}px`};
 `;
 
 const SeeAllButtonWrapper = styled(TouchableOpacity)`
@@ -60,7 +58,7 @@ const renderSectionHeader = (
     <SeeAllButtonWrapper
       onPress={() => navigation.navigate(nextRoute)}
     >
-      <SeeAllText>See All</SeeAllText>
+      <SeeAllText>Hepsini Gör</SeeAllText>
       <ArrowIcon />
     </SeeAllButtonWrapper>
   </HeaderWrapper>

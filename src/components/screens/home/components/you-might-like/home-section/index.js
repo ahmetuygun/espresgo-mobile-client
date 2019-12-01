@@ -13,7 +13,7 @@ const Container = styled(View)`
 
 const ListWrapper = styled(View)`
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
 type Props = {

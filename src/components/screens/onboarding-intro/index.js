@@ -1,7 +1,9 @@
 // @flow
 
 import React, { Component } from 'react';
-import { StatusBar, FlatList, View } from 'react-native';
+import {
+  StatusBar, FlatList, View, AsyncStorage,
+} from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
 import styled from 'styled-components';
@@ -13,6 +15,7 @@ import IntroScreen from './components/IntroScreen';
 
 import { ROUTE_NAMES } from '~/routes/index';
 import appStyles from '~/styles';
+import { hasAddress } from '../../../services/APIUtils';
 
 const Container = styled(View)`
   flex: 1;
@@ -47,10 +50,59 @@ type State = {
 class OnboardingIntro extends Component<Props, State> {
   state = {
     currentPageIndex: 0,
+    render: false,
   };
 
-  componentDidMount() {
+  getInitialRouteName = () => {
+    const { navigation } = this.props;
     SplashScreen.hide();
+    AsyncStorage.getItem('accessToken')
+      .then((data) => {
+        console.log(`token${data}`);
+        if (data) {
+          hasAddress(data)
+            .then((response) => {
+              console.log(`response${response}`);
+              if (!response) {
+                navigation.navigate(ROUTE_NAMES.ADDRESS);
+              } else {
+                navigation.navigate(ROUTE_NAMES.MAIN_STACK);
+              }
+            })
+            .catch((error) => {
+              navigation.navigate(ROUTE_NAMES.LOGIN);
+            });
+        } else {
+          AsyncStorage.getItem('splashScreen')
+            .then((data2) => {
+              if (data2) navigation.navigate(ROUTE_NAMES.LOGIN);
+              else {
+                this.setState({
+                  render: true,
+                });
+                AsyncStorage.setItem('splashScreen', '1');
+              }
+            })
+            .catch((err2) => {});
+        }
+      })
+      .catch((err) => {
+        AsyncStorage.getItem('splashScreen')
+          .then((data2) => {
+            if (data2) navigation.navigate(ROUTE_NAMES.LOGIN);
+            else {
+              this.setState({
+                render: true,
+              });
+              AsyncStorage.setItem('splashScreen', '1');
+            }
+          })
+          .catch((err2) => {});
+      });
+  };
+
+  componentWillMount() {
+    this.getInitialRouteName();
   }
 
   onIncrementPageIndex = (): void => {
@@ -154,8 +206,8 @@ class OnboardingIntro extends Component<Props, State> {
           translucent
           animated
         />
-        {this.renderPages()}
-        {this.renderPaginationController()}
+        {this.state.render ? this.renderPages() : null}
+        {this.state.render ? this.renderPaginationController() : null}
       </Container>
     );
   }

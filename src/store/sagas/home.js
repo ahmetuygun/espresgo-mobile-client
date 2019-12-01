@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 
 import { Creators as HomeActions } from '~/store/ducks/home';
-import api from '~/services/api';
+import { api } from '~/services/api';
 
 export function* homeRequest() {
   try {
@@ -9,6 +9,7 @@ export function* homeRequest() {
 
     yield put(HomeActions.getHomeSuccess(response.data));
   } catch (err) {
+    console.log(err);
     yield put(HomeActions.getHomeFailure());
   }
 }
