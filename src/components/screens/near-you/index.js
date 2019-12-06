@@ -121,7 +121,9 @@ class NearYouContainer extends Component<Props, State> {
     const { width, height } = Dimensions.get('window');
 
     const ASPECT_RATIO = width / height;
-    const latDelta = vehicleLocation.latitude - this.state.myLocation.latitude;
+    const latDelta = Math.abs(
+      vehicleLocation.latitude - this.state.myLocation.latitude,
+    );
     const lngDelta = latDelta * ASPECT_RATIO;
 
     return (

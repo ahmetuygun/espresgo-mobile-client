@@ -54,7 +54,7 @@ const TitleWrapper = styled(View)`
 `;
 
 const BackgroundImage = styled(Image).attrs({
-  source: require('./loginimg2.jpg'),
+  source: require('./login.jpg'),
   resizeMode: 'cover',
 })`
   position: absolute;

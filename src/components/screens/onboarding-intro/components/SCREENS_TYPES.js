@@ -1,28 +1,30 @@
 export const TYPES = {
-  FIND_RESTAURANTS: 'FIND_RESTAURANTS',
-  WITH_YOUR_TASTE: 'WITH_YOUR_TASTE',
-  CHOOSE_YOUR_MEAL: 'CHOOSE_YOUR_MEAL',
+  ONE: 'ONE',
+  TWO: 'TWO',
+  THREE: 'THREE',
 };
 
 export const SCREENS = {
-  [TYPES.FIND_RESTAURANTS]: {
-    title: 'FIND RESTAURANTS',
+  [TYPES.ONE]: {
+    title: 'Kahve Alışkanlığınızı değiştirecek yepyeni bir uygulama.',
     description:
-      'Search for Restaurants near you that fits with the dishes that you desire.',
-    image: 'findrestaurants',
+      'Espresgo, tam donanımlı mobil kahve araçlarıyla en taze %100 arabica çekirdeklerinden hazırlanan kahvenizi 15 dakikada ofisinize ulaştırmayı hedefleyen bir girişimdir.',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/espresgo-e742e.appspot.com/o/1.jpg?alt=media',
   },
 
-  [TYPES.WITH_YOUR_TASTE]: {
-    title: 'WITH YOUR TASTE',
-    description:
-      'You just need to tell what kind of food you are craving, and then we will show you a lot of different options.',
-    image: 'withyourtaste',
+  [TYPES.THREE]: {
+    title: 'Hoşgeldin kahve sever!',
+    description: 'İlk kahven hediye.',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/espresgo-e742e.appspot.com/o/2.jpg?alt=media',
   },
 
-  [TYPES.CHOOSE_YOUR_MEAL]: {
-    title: 'CHOOSE YOUR MEAL',
+  [TYPES.TWO]: {
+    title: 'Mobil Kahve!',
     description:
-      'Search among hundreds of dishes and pick the right meal for you based on trusted ratings and reviews.',
-    image: 'chooseyourmeal',
+      'Espresgo, kendi enerjisini bünyesinde barındırır ve ekstra enerjiye ihtiyaç duymadan 24 saate kadar hizmet verebilir.',
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/espresgo-e742e.appspot.com/o/3.jpg?alt=media',
   },
 };

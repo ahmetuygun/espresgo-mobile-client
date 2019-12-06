@@ -76,12 +76,12 @@ const BottomPagination = ({
       <TouchableOpacity
         onPress={onPressLeftButton}
       >
-        <ControllerText>{withSkip ? 'SKIP' : 'PREV'}</ControllerText>
+        <ControllerText>{withSkip ? 'Geç' : 'Geri'}</ControllerText>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={onPressRightButton}
       >
-        <ControllerText>NEXT</ControllerText>
+        <ControllerText>İleri</ControllerText>
       </TouchableOpacity>
     </ButtonsWrapper>
   </Container>

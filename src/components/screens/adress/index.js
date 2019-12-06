@@ -1,7 +1,7 @@
 // @flow
 
 import React, {Component} from 'react';
-import {AsyncStorage, StyleSheet, View, ScrollView} from 'react-native';
+import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
 import styled from 'styled-components';
 
 import {bindActionCreators} from 'redux';
@@ -66,7 +66,6 @@ class Address extends Component<Props, State> {
       email: '',
       addressDesciption : ''
     }
-
   };
 
 
@@ -340,12 +339,18 @@ class Address extends Component<Props, State> {
   signOut(a) {
 
     this.removeItemValue('accessToken')
+    this.removeItemValue('splashScreen')
+
     const {navigation} = this.props;
     navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
   }
 
 
   render() {
+
+    const {
+      buttonStyle, subButtonStyle
+    } = Styles;
     return (
       <Container>
         <ScrollView showsVerticalScrollIndicator={false} >
@@ -380,8 +385,14 @@ class Address extends Component<Props, State> {
           />
 
           <ButtonsContentContainer>
-            {this.renderSaveButton()}
-            {this.renderSignOutButton()}
+            <View style={buttonStyle}>
+              <View style={subButtonStyle}>
+                {this.renderSaveButton()}
+              </View>
+              <View style={subButtonStyle}>
+                {this.renderSignOutButton()}
+              </View>
+            </View>
           </ButtonsContentContainer>
         </ScrollView>
       </Container>
@@ -454,7 +465,19 @@ const Styles = StyleSheet.create({
     shadowColor: "#d3d3d3",
     borderRadius: 5,
     flexDirection: "row"
-  }
+  },
+  buttonStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  subButtonStyle: {
+    flex: 1,
+    paddingLeft : 3,
+    paddingRight : 3,
+    paddingTop: 8
+  },
 });
 const mapDispatchToProps = dispatch => bindActionCreators(AddressCreators, dispatch);
 const mapStateToProps = state => ({

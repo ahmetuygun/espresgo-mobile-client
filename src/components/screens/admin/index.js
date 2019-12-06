@@ -1,41 +1,44 @@
 // @flow
 
-import React, {Component} from 'react';
-import {AsyncStorage, Platform, ScrollView, Text, TouchableOpacity, View,} from 'react-native';
+import React, { Component } from 'react';
+import {
+  AsyncStorage,
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import styled from 'styled-components';
 
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {Creators as AdminCreators} from '~/store/ducks/admin';
-import {getBuildingByDistrict, getCities, getCompanyByBuilding, getDistrictByCity,} from '~/services/APIUtils';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Creators as AdminCreators } from '~/store/ducks/admin';
+import {
+  getBuildingByDistrict,
+  getCities,
+  getCompanyByBuilding,
+  getDistrictByCity,
+} from '~/services/APIUtils';
 import appStyles from '~/styles';
 import Loading from '~/components/common/Loading';
-import {Alert, TYPES} from '~/components/common/alert';
+import { Alert, TYPES } from '~/components/common/alert';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ButtonGroup} from 'react-native-elements';
+import { ButtonGroup } from 'react-native-elements';
 
-import Firebase from 'firebase';
-import {DefaultText} from '../login/components/Common';
+import { DefaultText } from '../login/components/Common';
 import ButtonContent from '../login/components/ButtonContent';
+import { db } from './firebaseConfig';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyASMXtkE-aXVRkUH5_Z3DyFSxvrXlLRl0c',
-  authDomain: 'espresgo-e742e.firebaseapp.com',
-  databaseURL: 'https://espresgo-e742e.firebaseio.com',
-  projectId: 'espresgo-e742e',
-  storageBucket: 'espresgo-e742e.appspot.com',
-  messagingSenderId: '667683830429',
-  appId: '1:667683830429:web:8845970158a0d835597274',
-  measurementId: 'G-HKCDVNZBJZ',
-};
+const itemsRef = db.ref('espresgo-test/order/');
 
 const Container = styled(View)`
   flex: 1;
-  padding: ${({theme}) => theme.metrics.mediumSize}px;
-  background-color: ${({theme}) => theme.colors.white};
+  padding: ${({ theme }) => theme.metrics.mediumSize}px;
+  background-color: ${({ theme }) => theme.colors.white};
 `;
 const ItemWrapper = styled(View)`
-  padding: ${({theme}) => theme.metrics.mediumSize}px;
+  padding: ${({ theme }) => theme.metrics.mediumSize}px;
 `;
 const OptionWrapper = styled(View)`
   flex-direction: row;
@@ -43,84 +46,80 @@ const OptionWrapper = styled(View)`
   justify-content: space-between;
 `;
 const SectionTitleText = styled(Text)`
-  color: ${({theme}) => theme.colors.darkText};
+  color: ${({ theme }) => theme.colors.darkText};
   font-family: CircularStd-Bold;
-  font-size: ${({theme}) => {
-  const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
-  return theme.metrics.getWidthFromDP(percentage);
-}}px;
+  font-size: ${({ theme }) => {
+    const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
+    return theme.metrics.getWidthFromDP(percentage);
+  }}px;
 `;
 const SmallText = styled(Text)`
-  color: ${({theme}) => theme.colors.subText};
-  margin: ${({theme}) => `${theme.metrics.extraSmallSize}px 0`};
+  color: ${({ theme }) => theme.colors.subText};
+  margin: ${({ theme }) => `${theme.metrics.extraSmallSize}px 0`};
   font-family: CircularStd-Book;
-  font-size: ${({theme}) => {
-  const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
-  return theme.metrics.getWidthFromDP(percentage);
-}}px;
+  font-size: ${({ theme }) => {
+    const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
+    return theme.metrics.getWidthFromDP(percentage);
+  }}px;
 `;
 const OptionTextWrapper = styled(View)`
   width: 75%;
 `;
 const OptionTextWrapperBackGround = styled(View)`
   width: 100%;
-  background-color: ${({theme}) => theme.colors.lightGray};
+  background-color: ${({ theme }) => theme.colors.lightGray};
 `;
 
 const LineSeparator = styled(View)`
   width: 100%;
-  height: ${({theme}) => theme.metrics.getHeightFromDP('0.1%')};
-  background-color: ${({theme}) => theme.colors.gray};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP('0.1%')};
+  background-color: ${({ theme }) => theme.colors.gray};
 `;
 const OptionWithouDescriptionWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: ${({theme}) => theme.metrics.largeSize}px;
+  margin: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
 const OptionWithouDescriptionWrapperHead = styled(View)`
   align-items: center;
-  margin: ${({theme}) => theme.metrics.extraLargeSize}px;
+  margin: ${({ theme }) => theme.metrics.extraLargeSize}px;
 `;
 
 const MediumText = styled(Text)`
-  color: ${({theme}) => theme.colors.subText};
-  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
+  color: ${({ theme }) => theme.colors.subText};
+  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({theme}) => {
-  const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
-  return theme.metrics.getWidthFromDP(percentage);
-}}px;
+  font-size: ${({ theme }) => {
+    const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+    return theme.metrics.getWidthFromDP(percentage);
+  }}px;
 `;
 
 const MediumTextGreen = styled(Text)`
-  color: ${({theme}) => theme.colors.green};
-  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
+  color: ${({ theme }) => theme.colors.green};
+  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({theme}) => {
-  const percentage = Platform.OS === 'ios' ? '7%' : '7%';
-  return theme.metrics.getWidthFromDP(percentage);
-}}px;
+  font-size: ${({ theme }) => {
+    const percentage = Platform.OS === 'ios' ? '7%' : '7%';
+    return theme.metrics.getWidthFromDP(percentage);
+  }}px;
 `;
 
 const MediumTextBlack = styled(Text)`
-  color: ${({theme}) => theme.colors.darkText};
-  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
+  color: ${({ theme }) => theme.colors.darkText};
+  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({theme}) => {
-  const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
-  return theme.metrics.getWidthFromDP(percentage);
-}}px;
+  font-size: ${({ theme }) => {
+    const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+    return theme.metrics.getWidthFromDP(percentage);
+  }}px;
 `;
 
 class Admin extends Component<Props, State> {
   constructor(props) {
     super(props);
-
-    if (!Firebase.apps.length) {
-      Firebase.initializeApp(firebaseConfig);
-    }
 
     this.selectOrder = this.selectOrder.bind(this);
 
@@ -142,60 +141,41 @@ class Admin extends Component<Props, State> {
     };
   }
 
+  async componentWillMount() {}
+
   async componentDidMount() {
     await AsyncStorage.getItem('accessToken')
       .then((token) => {
         if (token) {
-          const {requestAllOrder, isOrderClosed} = this.props;
+          const { isOrderClosed } = this.props;
 
           isOrderClosed(token);
-          requestAllOrder(token);
           this.setState({
             token: data,
           });
         }
       })
-      .catch((err) => {
-      });
-
-
-    Firebase.database()
-      .ref('espresgo-test/order/')
-      .on("child_added", (snapshot, prevChildKey) => {
-        this.setState({
-          orderListFirebase: [...this.state.orderListFirebase, snapshot.val()]
-        });
-      });
-
-    Firebase.database()
-      .ref('espresgo-test/order/')
-      .on("child_changed",  (snapshot) => {
-        this.setState(state => {
-          const orderListFirebase = state.orderListFirebase.filter(item => item.orderUid !== snapshot.val().orderUid);
-          orderListFirebase.push(snapshot.val());
-          return {
-            orderListFirebase,
-          };
-        });
+      .catch((err) => {});
+    debugger;
+    await itemsRef
+      .on('child_added', (snapshot, prevChildKey) => {
+        debugger;
+        if (snapshot) {
+          this.setState({
+            orderListFirebase: [
+              ...this.state.orderListFirebase,
+              snapshot.val(),
+            ],
+          });
+        }
       })
-
-
-    Firebase.database()
-      .ref('espresgo-test/order/')
-      .on("child_removed",  (snapshot) => {
-        this.setState(state => {
-          const orderListFirebase = state.orderListFirebase.filter(item => item.orderUid !== snapshot.val().orderUid);
-          return {
-            orderListFirebase,
-          };
-        });
-      })
-
+      .catch((error) => {
+        // error callback
+        console.log('error ', error);
+      });
   }
 
-  componentWillUnmount() {
-    // clearInterval(this.interval);
-
+  async componentWillUnmount() {
     this.setState({
       detailPage: false,
     });
@@ -237,9 +217,13 @@ class Admin extends Component<Props, State> {
     if (addressInfo) {
       if (addressInfo.city) address = `${address + addressInfo.city.name}-`;
 
-      if (addressInfo.district) address = `${address + addressInfo.district.name}-`;
+      if (addressInfo.district) {
+        address = `${address + addressInfo.district.name}-`;
+      }
 
-      if (addressInfo.building) address = `${address + addressInfo.building.name}-`;
+      if (addressInfo.building) {
+        address = `${address + addressInfo.building.name}-`;
+      }
 
       if (addressInfo.company) address += addressInfo.company.name;
     }
@@ -298,7 +282,7 @@ class Admin extends Component<Props, State> {
 
   renderOrderCheckList = (orders) => {
     let price = 0.0;
-    const {buttonStyle} = styles;
+    const { buttonStyle } = styles;
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -315,7 +299,7 @@ class Admin extends Component<Props, State> {
             order.amount,
           );
         })}
-        <LineSeparator/>
+        <LineSeparator />
 
         <OptionWithouDescriptionWrapper>
           <MediumText>Toplam</MediumText>
@@ -326,20 +310,23 @@ class Admin extends Component<Props, State> {
   };
 
   selectOrder = (orderUid) => {
-    const {allOrder} = this.props.admin;
+    const { getOrderByUid } = this.props;
 
-    const detailOrder = allOrder.data.history.filter(
-      item => item.orderUid === orderUid,
-    );
+    AsyncStorage.getItem('accessToken')
+      .then((token) => {
+        if (token) {
+          getOrderByUid(orderUid, token);
+        }
+      })
+      .catch((err) => {});
 
     this.setState({
       detailPage: true,
-      detailOrder,
     });
   };
 
   closeOrder = () => {
-    const {closeOrder, isOrderClosed} = this.props;
+    const { closeOrder, isOrderClosed } = this.props;
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
@@ -349,12 +336,11 @@ class Admin extends Component<Props, State> {
           });
         }
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   openOrder = () => {
-    const {openOrder, isOrderClosed} = this.props;
+    const { openOrder, isOrderClosed } = this.props;
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
@@ -364,13 +350,12 @@ class Admin extends Component<Props, State> {
           });
         }
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
 
   renderDetail = () => {
-    const {detailOrder} = this.state;
-    const {user, address, statusId} = detailOrder[0];
+    const { detailOrder } = this.state;
+    const { user, address, statusId } = detailOrder[0];
     return (
       <View>
         {this.renderBackButton()}
@@ -386,7 +371,7 @@ class Admin extends Component<Props, State> {
   renderBackButton = () => (
     <ButtonContent
       color={appStyles.colors.primaryColor}
-      onPress={a => this.setState({detailPage: false})}
+      onPress={a => this.setState({ detailPage: false })}
     >
       <DefaultText>Geri</DefaultText>
     </ButtonContent>
@@ -421,13 +406,13 @@ class Admin extends Component<Props, State> {
 
   renderOrderStatusButton = () => {
     const buttons = ['Yeni', 'Alındı', 'Gönderildi', 'Teslim'];
-    const {selectedOrderStatus} = this.state;
+    const { selectedOrderStatus } = this.state;
     return (
       <ButtonGroup
         onPress={this.updateSelectedOrderStatus}
         selectedIndex={selectedOrderStatus}
         buttons={buttons}
-        containerStyle={{height: 50, weight: 100}}
+        containerStyle={{ height: 50, weight: 100 }}
       />
     );
   };
@@ -439,29 +424,27 @@ class Admin extends Component<Props, State> {
         onPress={this.updateSelectedOrderStatusDetail}
         selectedIndex={currentOrderStatus}
         buttons={buttons}
-        containerStyle={{height: 50, weight: 100}}
+        containerStyle={{ height: 50, weight: 100 }}
       />
     );
   };
 
   updateSelectedOrderStatus(selectedOrderStatus) {
-    this.setState({selectedOrderStatus});
+    this.setState({ selectedOrderStatus });
   }
 
   updateSelectedOrderStatusDetail(selectedOrderStatusDetail) {
-    this.setState({selectedOrderStatusDetail});
-    const {detailOrder} = this.state;
-    const {updateOrderStatus} = this.props;
-    const newDetail = this.state.orderListSynch.data.history.filter(
-      item => item.orderUid === detailOrder[0].orderUid,
-    );
-    newDetail[0].statusId = selectedOrderStatusDetail;
-    const newList = this.state.orderListSynch.data.history.filter(
-      item => item.orderUid !== detailOrder[0].orderUid,
-    );
-    newList.push(newDetail);
+    const { detailOrder } = this.state;
+    const { updateOrderStatus } = this.props;
+    const detailOrderObject = detailOrder[0];
+    const detailOrderList = [];
+    detailOrderObject.statusId = selectedOrderStatusDetail;
+    detailOrderList.push(detailOrderObject);
 
-    this.setState();
+    this.setState({
+      detailOrder: detailOrderList,
+      selectedOrderStatusDetail,
+    });
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
@@ -470,15 +453,9 @@ class Admin extends Component<Props, State> {
             selectedOrderStatusDetail,
             data,
           );
-          detailOrder[0].statusId = selectedOrderStatusDetail;
-          this.setState({
-            token: data,
-            orderListSynch: newList,
-          });
         }
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   }
 
   setLocation = () => {
@@ -496,15 +473,14 @@ class Admin extends Component<Props, State> {
         AsyncStorage.getItem('accessToken')
           .then((data) => {
             if (data) {
-              const {setLocation} = this.props;
+              const { setLocation } = this.props;
               setLocation(latitude, longitude, data);
             }
           })
-          .catch((err) => {
-          });
+          .catch((err) => {});
       },
       error => console.log('position error!!!', error),
-      {enableHighAccuracy: true, timeout: 30000},
+      { enableHighAccuracy: true, timeout: 30000 },
     );
   };
 
@@ -520,45 +496,48 @@ class Admin extends Component<Props, State> {
     {
       if (allOrder) {
         return (
-          <View>
-            {allOrder.map((item) => {
-
-              return (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => this.selectOrder(item.orderUid)}
-                  >
-                    {this.renderItemWitDescriptionForHistory(
-                      item.orderItemNames,
-                      item.orderDate,
-                      '',
-                      item.addessText,
-                    )}
-                  </TouchableOpacity>
-                  <LineSeparator/>
-                </View>
-              );
-            })}
-          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+          >
+            {allOrder.map(item => (
+              <View>
+                <TouchableOpacity
+                  onPress={() => this.selectOrder(item.orderUid)}
+                >
+                  {this.renderItemWitDescriptionForHistory(
+                    item.orderItemNames,
+                    item.orderDate,
+                    '',
+                    item.addessText,
+                  )}
+                </TouchableOpacity>
+                <LineSeparator />
+              </View>
+            ))}
+          </ScrollView>
         );
       }
     }
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.admin && nextProps.admin.allOrder) {
+    if (
+      nextProps.admin.orderDetail.data
+      && nextProps.admin.orderDetail.data.history
+    ) {
       this.setState({
-        orderListSynch: nextProps.admin.allOrder,
+        detailOrder: nextProps.admin.orderDetail.data.history,
       });
     }
   }
 
   render() {
-    const {loading, error, orderClosed} = this.props.admin;
-    const {orderListSynch, orderListFirebase, selectedOrderStatus} = this.state;
+    const { buttonStyle, subButtonStyle } = styles;
+
+    const { loading, error, orderClosed } = this.props.admin;
+    const { orderListFirebase, selectedOrderStatus } = this.state;
 
     let orderList = [];
-    debugger;
 
     if (orderListFirebase.length > 0) {
       orderList = orderListFirebase.filter(
@@ -571,29 +550,46 @@ class Admin extends Component<Props, State> {
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
-          {loading && <Loading/>}
+          {loading && <Loading />}
           {error && <Alert
             type={TYPES.ERROR_SERVER_CONNECTION}
           />}
 
-          {!this.state.detailPage && this.setLocationButton()}
-          {!this.state.detailPage
-          && orderClosed
-          && orderClosed.data
-          && this.renderOpenOrderButton()}
-          {!this.state.detailPage
-          && orderClosed
-          && !orderClosed.data
-          && this.renderCloseOrderButton()}
+          <View
+            style={buttonStyle}
+          >
+            <View
+              style={subButtonStyle}
+            >
+              {!this.state.detailPage && this.setLocationButton()}
+            </View>
+            <View
+              style={subButtonStyle}
+            >
+              {!this.state.detailPage
+                && orderClosed
+                && orderClosed.data
+                && this.renderOpenOrderButton()}
+              {!this.state.detailPage
+                && orderClosed
+                && !orderClosed.data
+                && this.renderCloseOrderButton()}
+            </View>
+          </View>
+
           {!this.state.detailPage && this.renderOrderStatusButton()}
 
           {!this.state.detailPage
-          && !loading
-          && !error
-          && orderList.length > 0
-          && this.renderAllOrder(orderList, orderClosed)}
+            && !loading
+            && !error
+            && orderList.length > 0
+            && this.renderAllOrder(orderList, orderClosed)}
 
-          {this.state.detailPage && !loading && !error && this.renderDetail()}
+          {this.state.detailPage
+            && this.state.detailOrder.length > 0
+            && !loading
+            && !error
+            && this.renderDetail()}
         </ScrollView>
       </Container>
     );
@@ -625,10 +621,20 @@ const styles = {
     lineHeight: 23,
     flex: 2,
   },
-  buttonStyle: {
-    paddingTop: 20,
-  },
   subContainerStyle: {
     paddingTop: 10,
+  },
+
+  buttonStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subButtonStyle: {
+    flex: 1,
+    paddingLeft: 3,
+    paddingRight: 3,
+    paddingTop: 8,
   },
 };

@@ -14,7 +14,7 @@ const TextContainer = styled(View)`
   width: 100%;
   justify-content: center;
   align-items: center;
-  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('60%')}px;
+  margin-top: ${({ theme }) => theme.metrics.getHeightFromDP('20%')}px;
   padding-horizontal: ${({ theme }) => theme.metrics.getWidthFromDP('10%')}px;
 `;
 

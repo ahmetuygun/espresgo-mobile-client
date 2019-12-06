@@ -120,3 +120,25 @@ export function* openOrder(action) {
     yield put(AdminActions.openOrderFailure(err));
   }
 }
+export function* getOrderByUid(action) {
+  try {
+    const { orderUid, data } = action.payload;
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${data}`,
+    };
+    const getOrderByUidRequest = {
+      uid: orderUid,
+    };
+    debugger;
+    const response = yield call(
+      apiLogin.post,
+      '/coffee/getOrderByUid',
+      JSON.stringify(getOrderByUidRequest),
+      { headers },
+    );
+    yield put(AdminActions.getOrderByUidSuccess(response.data));
+  } catch (err) {
+    yield put(AdminActions.getOrderByUidFailure(err));
+  }
+}

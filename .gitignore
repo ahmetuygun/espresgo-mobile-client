@@ -58,3 +58,28 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+src/components/screens/login/logo.png
+src/components/screens/login/login.jpg
+src/components/screens/login/espresgos_hor_1.png
+src/components/screens/login/espresgos_hor.png
+src/components/screens/login/components/Webp.net-resizeimage.png
+src/components/screens/admin/firebaseConfig.js
+ios/bon-appetit-mobileTests/bon-appetit-mobileTests.m
+ios/bon-appetit-mobileTests/Info.plist
+ios/bon-appetit-mobile/main.m
+ios/bon-appetit-mobile/Info.plist
+ios/bon-appetit-mobile/Images.xcassets/Contents.json
+ios/bon-appetit-mobile/Images.xcassets/AppIcon.appiconset/Contents.json
+ios/bon-appetit-mobile/Base.lproj/LaunchScreen.xib
+ios/bon-appetit-mobile/AppDelegate.m
+ios/bon-appetit-mobile/AppDelegate.h
+ios/bon-appetit-mobile.xcodeproj/project.pbxproj
+ios/bon-appetit-mobile-tvOSTests/Info.plist
+ios/bon-appetit-mobile-tvOS/Info.plist
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+android/app/src/main/java/com/bon-appetit-mobile/MainApplication.java
+android/app/src/main/java/com/bon-appetit-mobile/MainActivity.java

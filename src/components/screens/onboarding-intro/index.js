@@ -33,11 +33,7 @@ const BottomContent = styled(View)`
   position: absolute;
 `;
 
-const PAGES = [
-  SCREENS[TYPES.FIND_RESTAURANTS],
-  SCREENS[TYPES.WITH_YOUR_TASTE],
-  SCREENS[TYPES.CHOOSE_YOUR_MEAL],
-];
+const PAGES = [SCREENS[TYPES.ONE], SCREENS[TYPES.TWO], SCREENS[TYPES.THREE]];
 
 type Props = {
   navigation: Object,
@@ -80,7 +76,7 @@ class OnboardingIntro extends Component<Props, State> {
                 this.setState({
                   render: true,
                 });
-                AsyncStorage.setItem('splashScreen', '1');
+                // AsyncStorage.setItem('splashScreen', '1');
               }
             })
             .catch((err2) => {});
@@ -94,7 +90,7 @@ class OnboardingIntro extends Component<Props, State> {
               this.setState({
                 render: true,
               });
-              AsyncStorage.setItem('splashScreen', '1');
+              // AsyncStorage.setItem('splashScreen', '1');
             }
           })
           .catch((err2) => {});

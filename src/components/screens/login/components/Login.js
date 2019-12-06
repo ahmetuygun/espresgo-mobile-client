@@ -258,9 +258,7 @@ class LoginComponent extends Component<Props, State> {
 
     return (
       <Container>
-        <Animated.View
-          style={emailAnimationStyle}
-        >
+
           {this.renderInput(
             'E-mail',
             'email-outline',
@@ -270,10 +268,7 @@ class LoginComponent extends Component<Props, State> {
             'email',
             this.state.user.placeHolderColor
           )}
-        </Animated.View>
-        <Animated.View
-          style={passwordAnimationStyle}
-        >
+
           {this.renderInput(
             'Şifre',
             'lock-outline',
@@ -283,17 +278,13 @@ class LoginComponent extends Component<Props, State> {
             'password',
             this.state.password.placeHolderColor
           )}
-        </Animated.View>
-        <Animated.View
-          style={loginButtonAnimationStyle}
-        >
+
           <ButtonContent
             color={appStyles.colors.primaryColor}
             onPress = {(a) =>  {this.validateField()}}
           >
             <DefaultText>Giriş</DefaultText>
           </ButtonContent>
-        </Animated.View>
         {this.renderForgotPasswordText()}
 
         <Dialog

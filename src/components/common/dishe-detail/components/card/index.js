@@ -65,10 +65,10 @@ const Card = ({
     description, id, image, selection, startPrice, title,
   } = coffeeDetail;
   const {
-    containerStyle,
     pickerStyle,
     subContainerStyle,
     buttonStyle,
+    subButtonStyle,
   } = styles;
   return (
     <Container>
@@ -121,12 +121,26 @@ const Card = ({
         <View
           style={buttonStyle}
         >
-          <ButtonContent
-            color={appStyles.colors.primaryColor}
-            onPress={a => orderAction()}
+          <View
+            style={subButtonStyle}
           >
-            <DefaultText>Sepete Ekle</DefaultText>
-          </ButtonContent>
+            <ButtonContent
+              color={appStyles.colors.primaryColor}
+              onPress={a => orderAction()}
+            >
+              <DefaultText>Sepete Ekle</DefaultText>
+            </ButtonContent>
+          </View>
+          <View
+            style={subButtonStyle}
+          >
+            <ButtonContent
+              color={appStyles.colors.primaryColor}
+              onPress={a => onSnackbarAction()}
+            >
+              <DefaultText>Sepete Git</DefaultText>
+            </ButtonContent>
+          </View>
         </View>
       </ScrollView>
       <Snackbar
@@ -161,7 +175,16 @@ const styles = {
     flex: 2,
   },
   buttonStyle: {
-    paddingTop: 20,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  subButtonStyle: {
+    flex: 1,
+    paddingLeft: 3,
+    paddingRight: 3,
+    paddingTop: 8,
   },
   subContainerStyle: {
     paddingTop: 10,

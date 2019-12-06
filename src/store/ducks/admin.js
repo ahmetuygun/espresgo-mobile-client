@@ -23,6 +23,10 @@ export const Types = {
   UPDATE_ORDER_STATUS_REQUEST_SUCCESS:
     'admin/UPDATE_ORDER_STATUS_REQUEST_SUCCESS',
   UPDATE_ORDER_STATUS_REQUEST_FAIL: 'admin/UPDATE_ORDER_STATUS_REQUEST_FAIL',
+
+  GET_ORDER_BY_UID_REQUEST: 'admin/GET_ORDER_BY_UID_REQUEST',
+  GET_ORDER_BY_UID_SUCCESS: 'admin/GET_ORDER_BY_UID_SUCCESS',
+  GET_ORDER_BY_UID_FAIL: 'admin/GET_ORDER_BY_UID_FAIL',
 };
 
 const initialState = {
@@ -31,6 +35,7 @@ const initialState = {
   allOrder: [],
   message: {},
   orderClosed: false,
+  orderDetail: [],
 };
 
 export const Creators = {
@@ -121,6 +126,21 @@ export const Creators = {
 
   openOrderFailure: err => ({
     type: Types.OPEN_ORDER_FAIL,
+    payload: { err },
+  }),
+
+  getOrderByUid: (orderUid, data) => ({
+    type: Types.GET_ORDER_BY_UID_REQUEST,
+    payload: { orderUid, data },
+  }),
+
+  getOrderByUidSuccess: data => ({
+    type: Types.GET_ORDER_BY_UID_SUCCESS,
+    payload: { data },
+  }),
+
+  getOrderByUidFailure: err => ({
+    type: Types.GET_ORDER_BY_UID_FAIL,
     payload: { err },
   }),
 };
@@ -244,6 +264,25 @@ const admin = (state = initialState, { type, payload }) => {
         error: true,
         message: { payload },
       };
+
+    case Types.GET_ORDER_BY_UID_REQUEST:
+      return {
+        ...state,
+        error: false,
+      };
+    case Types.GET_ORDER_BY_UID_SUCCESS:
+      return {
+        ...state,
+        orderDetail: payload,
+        error: false,
+      };
+    case Types.GET_ORDER_BY_UID_FAIL:
+      return {
+        ...state,
+        error: true,
+        message: { payload },
+      };
+
     default:
       return state;
   }

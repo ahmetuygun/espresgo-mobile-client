@@ -18,27 +18,28 @@ import { requestSearchRestaurants } from './search-restaurants';
 import { requestAllEvents, requestEventDetails } from './events';
 import { requestRestaurantDetail } from './restaurant';
 import { homeRequest } from './home';
-import { requestDishDetail, requestAllDishes } from './dish';
+import { requestAllDishes, requestDishDetail } from './dish';
 import { loginRequest } from './login';
 import { signUpRequest } from './signUp';
 import {
-  requestCoffee,
-  requestCoffeeDetail,
+  getHistory,
   orderCoffee,
   orderSingle,
   removeOrderSingle,
-  getHistory,
+  requestCoffee,
+  requestCoffeeDetail,
 } from './coffee';
-import { registerAdress, getUserDetail } from './adress';
+import { getUserDetail, registerAdress } from './adress';
 import {
-  requestAllOrder,
-  setLocation,
   closeOrder,
+  getOrderByUid,
   isOrderClosed,
   openOrder,
+  requestAllOrder,
+  setLocation,
   updateOrderStatus,
 } from './admin';
-import { setMyLocation, requestVehicleLocation } from './map';
+import { requestVehicleLocation, setMyLocation } from './map';
 
 export default function* rootSaga() {
   return yield all([
@@ -73,6 +74,7 @@ export default function* rootSaga() {
     takeLatest(AdminTypes.IS_ORDER_CLOSE_REQUEST, isOrderClosed),
     takeLatest(AdminTypes.OPEN_ORDER_REQUEST, openOrder),
     takeLatest(AdminTypes.UPDATE_ORDER_STATUS_REQUEST, updateOrderStatus),
+    takeLatest(AdminTypes.GET_ORDER_BY_UID_REQUEST, getOrderByUid),
 
     takeLatest(MapTypes.SET_MY_LOCATION_REQUEST, setMyLocation),
     takeLatest(MapTypes.VEHICLE_LOCATION_REQUEST, requestVehicleLocation),

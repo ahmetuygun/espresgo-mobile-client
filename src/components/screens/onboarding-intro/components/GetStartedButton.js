@@ -39,7 +39,7 @@ const GetStartedButton = ({ navigation }: Props): Object => (
     <Button
       onPress={() => navigation.navigate(ROUTE_NAMES.LOGIN)}
     >
-      <ButtonText>GET STARTED</ButtonText>
+      <ButtonText>BAŞLA!</ButtonText>
     </Button>
   </ButtonWrapper>
 );
