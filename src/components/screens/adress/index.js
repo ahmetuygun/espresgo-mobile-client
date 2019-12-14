@@ -3,6 +3,7 @@
 import React, {Component} from 'react';
 import {AsyncStorage, ScrollView, StyleSheet, View} from 'react-native';
 import styled from 'styled-components';
+import Loading from '~/components/common/Loading';
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -276,6 +277,8 @@ class Address extends Component<Props, State> {
           name: userDetail.address.company.name,
           id: userDetail.address.company.id
         },
+        addressDesciption: userDetail.address.addressDesciption
+
 
       })
 
@@ -346,55 +349,73 @@ class Address extends Component<Props, State> {
   }
 
 
-  render() {
+  renderMain(){
 
     const {
       buttonStyle, subButtonStyle
     } = Styles;
+
+    return(
+      <ScrollView showsVerticalScrollIndicator={false} >
+        <TextField
+          label='İsim'
+          value={this.state.name}
+          onChangeText={(name) => this.setState({name})}
+        />
+        <TextField
+          label='Email'
+          value={this.state.email}
+          onChangeText={(email) => this.setState({email})}
+        />
+
+        <TextField
+          label='Telefon' disabled={true}
+          value={this.state.phone}
+          onChangeText={(phone) => this.setState({phone})}
+        />
+
+        {this.renderDropDown(this.state.cities, '(1)Şehir Seçimi', this.state.selectedCity, this.selectCity)}
+        {this.renderDropDown(this.state.districts, '(2)Ilçe Seçimi', this.state.selectedDistrict, this.selectDistrict)}
+
+
+        {this.renderDropDown(this.state.buildings, '(3)Plaza Seçimi ', this.state.selectedBuilding, this.selectBuilding)}
+        {this.renderDropDown(this.state.companies, '(4)Şirket Seçimi ', this.state.selectedCompany, this.selectCompany)}
+
+        <TextField
+          label='Kat, Birim, Açıklama vs' disabled={false}
+          value={this.state.addressDesciption}
+          onChangeText={(addressDesciption) => this.setState({addressDesciption})}
+        />
+
+        <ButtonsContentContainer>
+          <View style={buttonStyle}>
+            <View style={subButtonStyle}>
+              {this.renderSaveButton()}
+            </View>
+            <View style={subButtonStyle}>
+              {this.renderSignOutButton()}
+            </View>
+          </View>
+        </ButtonsContentContainer>
+      </ScrollView>
+    )
+
+  }
+
+  render() {
+
+    const { loading, error } = this.props.adress;
+
     return (
       <Container>
-        <ScrollView showsVerticalScrollIndicator={false} >
-          <TextField
-            label='İsim'
-            value={this.state.name}
-            onChangeText={(name) => this.setState({name})}
-          />
-          <TextField
-            label='Email'
-            value={this.state.email}
-            onChangeText={(email) => this.setState({email})}
-          />
 
-          <TextField
-            label='Telefon' disabled={true}
-            value={this.state.phone}
-            onChangeText={(phone) => this.setState({phone})}
-          />
+        {loading && <Loading />}
+        {error && <Alert
+          type={TYPES.ERROR_SERVER_CONNECTION}  />}
 
-          {this.renderDropDown(this.state.cities, '(1)Şehir Seçimi', this.state.selectedCity, this.selectCity)}
-          {this.renderDropDown(this.state.districts, '(2)Ilçe Seçimi', this.state.selectedDistrict, this.selectDistrict)}
+        {!loading
+        && !error && this.renderMain()}
 
-
-          {this.renderDropDown(this.state.buildings, '(3)Plaza Seçimi ', this.state.selectedBuilding, this.selectBuilding)}
-          {this.renderDropDown(this.state.companies, '(4)Şirket Seçimi ', this.state.selectedCompany, this.selectCompany)}
-
-          <TextField
-            label='Kat, Birim, Açıklama vs' disabled={false}
-            value={this.state.addressDesciption}
-            onChangeText={(addressDesciption) => this.setState({addressDesciption})}
-          />
-
-          <ButtonsContentContainer>
-            <View style={buttonStyle}>
-              <View style={subButtonStyle}>
-                {this.renderSaveButton()}
-              </View>
-              <View style={subButtonStyle}>
-                {this.renderSignOutButton()}
-              </View>
-            </View>
-          </ButtonsContentContainer>
-        </ScrollView>
       </Container>
     );
 

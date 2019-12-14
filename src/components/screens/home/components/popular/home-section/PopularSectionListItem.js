@@ -15,10 +15,12 @@ import FlagPrice from '~/components/common/FlagPrice';
 import CONSTANTS from '~/utils/CONSTANTS';
 
 const Container = styled(View)`
-  width: ${({ theme }) => theme.metrics.getWidthFromDP('28%')};
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('30%')};
-  margin-left: ${({ theme, isFirst }) => (isFirst ? theme.metrics.largeSize : 0)}px;
-  margin-right: ${({ theme }) => theme.metrics.largeSize}px;
+  width: ${({ theme, medium }) => (medium
+    ? theme.metrics.getWidthFromDP('35%')
+    : theme.metrics.getWidthFromDP('28%'))};
+  height: ${({ theme }) => theme.metrics.getHeightFromDP('25%')};
+  margin-left: ${({ theme, isFirst }) => (isFirst ? theme.metrics.mediumSize : 0)}px;
+  margin-right: ${({ theme }) => theme.metrics.mediumSize}px;
 `;
 
 const ImageShimmerOverlay = styled(ShimmerPlaceholder).attrs({
@@ -33,7 +35,7 @@ const ImageShimmerOverlay = styled(ShimmerPlaceholder).attrs({
 
 const DarkLayer = styled(View)`
   width: 100%;
-  height: 70%;
+  height: 80%;
   position: absolute;
   background-color: ${({ theme }) => theme.colors.lightDarkLayer};
   border-radius: ${({ theme }) => theme.metrics.borderRadius}px;
@@ -43,14 +45,14 @@ const DisheImage = styled(Image).attrs(({ imageURL }) => ({
   source: { uri: imageURL },
 }))`
   width: 100%;
-  height: 70%;
+  height: 80%;
   border-radius: ${({ theme }) => theme.metrics.borderRadius}px;
 `;
 
 const BottomWrapper = styled(View)`
   width: 100%;
   height: 30%;
-  padding-top: ${({ theme }) => theme.metrics.smallSize}px;
+  padding-top: ${({ theme }) => theme.metrics.extraSmallSize}px;
 `;
 
 const DisheTitle = styled(Text).attrs({
@@ -78,6 +80,7 @@ type Props = {
   stars: number,
   price: number,
   id: string,
+  medium: boolean,
 };
 
 type State = {
@@ -128,13 +131,16 @@ class PopularSectionListItem extends Component<Props, State> {
   };
 
   render() {
-    const { navigation, isFirst, id } = this.props;
+    const {
+      navigation, isFirst, id, medium,
+    } = this.props;
     const { isDisheImageLoaded } = this.state;
 
     return (
       <Fragment>
         <Container
           isFirst={isFirst}
+          medium={medium}
         >
           <TouchableWithoutFeedback
             onPress={() => {

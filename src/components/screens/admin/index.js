@@ -26,11 +26,20 @@ import { Alert, TYPES } from '~/components/common/alert';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ButtonGroup } from 'react-native-elements';
 
+import Firebase from 'firebase';
 import { DefaultText } from '../login/components/Common';
 import ButtonContent from '../login/components/ButtonContent';
-import { db } from './firebaseConfig';
 
-const itemsRef = db.ref('espresgo-test/order/');
+const firebaseConfig = {
+  apiKey: 'AIzaSyASMXtkE-aXVRkUH5_Z3DyFSxvrXlLRl0c',
+  authDomain: 'espresgo-e742e.firebaseapp.com',
+  databaseURL: 'https://espresgo-e742e.firebaseio.com',
+  projectId: 'espresgo-e742e',
+  storageBucket: 'espresgo-e742e.appspot.com',
+  messagingSenderId: '667683830429',
+  appId: '1:667683830429:web:8845970158a0d835597274',
+  measurementId: 'G-HKCDVNZBJZ',
+};
 
 const Container = styled(View)`
   flex: 1;
@@ -120,7 +129,9 @@ const MediumTextBlack = styled(Text)`
 class Admin extends Component<Props, State> {
   constructor(props) {
     super(props);
-
+    if (!Firebase.apps.length) {
+      Firebase.initializeApp(firebaseConfig);
+    }
     this.selectOrder = this.selectOrder.bind(this);
 
     this.updateSelectedOrderStatus = this.updateSelectedOrderStatus.bind(this);
@@ -141,8 +152,6 @@ class Admin extends Component<Props, State> {
     };
   }
 
-  async componentWillMount() {}
-
   async componentDidMount() {
     await AsyncStorage.getItem('accessToken')
       .then((token) => {
@@ -156,26 +165,48 @@ class Admin extends Component<Props, State> {
         }
       })
       .catch((err) => {});
-    debugger;
-    await itemsRef
+
+    Firebase.database()
+      .ref('espresgo-test/order/')
       .on('child_added', (snapshot, prevChildKey) => {
         debugger;
-        if (snapshot) {
-          this.setState({
-            orderListFirebase: [
-              ...this.state.orderListFirebase,
-              snapshot.val(),
-            ],
-          });
-        }
-      })
-      .catch((error) => {
-        // error callback
-        console.log('error ', error);
+        console.log('espresgo-test/order... successfull');
+        this.setState({
+          orderListFirebase: [...this.state.orderListFirebase, snapshot.val()],
+        });
+      });
+
+    Firebase.database()
+      .ref('espresgo-test/order/')
+      .on('child_changed', (snapshot) => {
+        this.setState((state) => {
+          const orderListFirebase = state.orderListFirebase.filter(
+            item => item.orderUid !== snapshot.val().orderUid,
+          );
+          orderListFirebase.push(snapshot.val());
+          return {
+            orderListFirebase,
+          };
+        });
+      });
+
+    Firebase.database()
+      .ref('espresgo-test/order/')
+      .on('child_removed', (snapshot) => {
+        this.setState((state) => {
+          const orderListFirebase = state.orderListFirebase.filter(
+            item => item.orderUid !== snapshot.val().orderUid,
+          );
+          return {
+            orderListFirebase,
+          };
+        });
       });
   }
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
+    // clearInterval(this.interval);
+
     this.setState({
       detailPage: false,
     });

@@ -19,10 +19,13 @@ type Props = {
   dishes: Array<Object>,
   loading: boolean,
   error: boolean,
+  list: Array<Object>,
 };
 
-const AllYouMightLike = ({ loading, coffee, error }: Props): Object => {
-  const shouldRenderContent = !loading && !error;
+const AllYouMightLike = ({ loading, error, list }: Props): Object => {
+  debugger;
+  const shouldRenderContent = !loading && !error && list;
+  debugger;
   return (
     <Wrapper>
       {loading && <Loading />}
@@ -42,7 +45,7 @@ const AllYouMightLike = ({ loading, coffee, error }: Props): Object => {
           )}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => item.id}
-          data={coffee.list}
+          data={list}
         />
       )}
     </Wrapper>

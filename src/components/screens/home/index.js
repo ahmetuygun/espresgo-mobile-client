@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { ScrollView, RefreshControl, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
@@ -9,7 +9,6 @@ import { connect } from 'react-redux';
 import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
 
 import { persistItemInStorage } from '~/utils/AsyncStoarageManager';
-import CONSTANTS from '~/utils/CONSTANTS';
 import appStyles from '~/styles';
 
 import { Alert, TYPES } from '~/components/common/alert';
@@ -31,7 +30,7 @@ type Props = {
 };
 
 type State = {
-  isRefresing: boolean,
+  isRefresing: bYouMightLikeSectionoolean,
 };
 
 type HomeRequestResult = {
@@ -62,8 +61,16 @@ class Home extends Component<Props, State> {
 
   renderMainContent = (data: HomeRequestResult): Object => {
     const { isRefresing } = this.state;
-    const hasPopularDishes = true;
+    debugger;
 
+    let coffee = [];
+    let sandvic = [];
+    let cold = [];
+    if (data && data.list && data.list.length > 0) {
+      coffee = data.list.filter(item => item.productType === 'COFFEE');
+      sandvic = data.list.filter(item => item.productType === 'SAND');
+      cold = data.list.filter(item => item.productType === 'COLD');
+    }
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -77,16 +84,36 @@ class Home extends Component<Props, State> {
           />
         }
       >
-        {hasPopularDishes && (
-          <Section
-            nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
-            title="Espresso Bazlı İçecekler"
-          >
-            <PopularSection
-              coffee={data}
-            />
-          </Section>
-        )}
+        <Section
+          nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
+          product={coffee}
+          title="Espresso Bazlı İçecekler"
+        >
+          <PopularSection
+            product={coffee}
+            medium={false}
+          />
+        </Section>
+        <Section
+          nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
+          product={sandvic}
+          title="Sandviç, Atıştırmalık"
+        >
+          <PopularSection
+            product={sandvic}
+            medium
+          />
+        </Section>
+        <Section
+          nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
+          product={cold}
+          title="Soğuk, Smoothie"
+        >
+          <PopularSection
+            product={cold}
+            medium={false}
+          />
+        </Section>
       </ScrollView>
     );
   };

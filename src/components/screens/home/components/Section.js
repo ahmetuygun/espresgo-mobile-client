@@ -6,7 +6,6 @@ import { withNavigation } from 'react-navigation';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
-
 import CONSTANTS from '~/utils/CONSTANTS';
 
 const ContentContainer = styled(View)`
@@ -17,7 +16,7 @@ const HeaderWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => `${theme.metrics.largeSize}px ${theme.metrics.smallSize}px ${theme.metrics.extraSmallSize}px  ${theme.metrics.largeSize}px`};
+  padding: ${({ theme }) => `${theme.metrics.mediumSize}px ${theme.metrics.smallSize}px ${theme.metrics.extraSmallSize}px  ${theme.metrics.largeSize}px`};
 `;
 
 const SeeAllButtonWrapper = styled(TouchableOpacity)`
@@ -52,11 +51,13 @@ const renderSectionHeader = (
   navigation: Object,
   nextRoute: string,
   title: string,
+  product: Array<Object>,
 ): Object => (
   <HeaderWrapper>
     <SectionText>{title}</SectionText>
     <SeeAllButtonWrapper
-      onPress={() => navigation.navigate(nextRoute)}
+      onPress={() => navigation.navigate(nextRoute, { [CONSTANTS.SEE_ALL_LIST]: product })
+      }
     >
       <SeeAllText>Hepsini Gör</SeeAllText>
       <ArrowIcon />
@@ -69,14 +70,19 @@ type Props = {
   nextRoute: string,
   children: Object,
   title: string,
+  product: Array<Object>,
 };
 
 const Section = ({
-  title, nextRoute, navigation, children,
+  title,
+  nextRoute,
+  navigation,
+  children,
+  product,
 }: Props) => (
   <ContentContainer>
     <View>
-      {renderSectionHeader(navigation, nextRoute, title)}
+      {renderSectionHeader(navigation, nextRoute, title, product)}
       {children}
     </View>
   </ContentContainer>

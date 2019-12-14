@@ -7,7 +7,6 @@ import styled from 'styled-components';
 
 import appStyles from '~/styles';
 
-
 import { ROUTE_NAMES } from '~/routes';
 import { Alert, TYPES } from '~/components/common/alert';
 import Loading from '~/components/common/Loading';
@@ -22,6 +21,7 @@ import Dialog, { DialogContent, DialogTitle } from 'react-native-popup-dialog';
 import {
   checkEmailAvailability,
   checkUsernameAvailability,
+  activeteUser,
 } from '../../../../services/APIUtils';
 import { DefaultText } from './Common';
 import ButtonContent from './ButtonContent';
@@ -67,7 +67,8 @@ class SignUp extends Component<Props, State> {
       loading: false,
       error: false,
       isSmsValidationOK: false,
-      smsCode: '100',
+      smsCode: '',
+      token: '',
       smsValidatorMessage: 'Telefonunuza gelen kodu giriniz',
       smsValidationDialogVisible: false,
     };
@@ -239,7 +240,8 @@ class SignUp extends Component<Props, State> {
         placeHolderColor: 'tomato',
         value: '',
       };
-    } if (password.length > 15) {
+    }
+    if (password.length > 15) {
       return {
         valid: false,
         placeHolder: `Şifre en çok ${15} karakter olmalıdır.`,
@@ -289,7 +291,7 @@ class SignUp extends Component<Props, State> {
     );
   }
 
-  validateSms(sms) {
+  validateSms() {
     this.setState({
       smsValidationDialogVisible: true,
     });
@@ -317,11 +319,10 @@ class SignUp extends Component<Props, State> {
       && nextProps.signUp
       && nextProps.signUp.message
       && nextProps.signUp.message.payload.data
+      && nextProps.signUp.message.payload.data.success
     ) {
-      this.setState({
-        smsCode: nextProps.signUp.message.payload.data.message,
-      });
-      this.validateSms(this.state.phone);
+      debugger;
+      this.validateSms();
     } else if (
       loading == false
       && registered == false
@@ -329,12 +330,10 @@ class SignUp extends Component<Props, State> {
       && nextProps.signUp.message
       && nextProps.signUp.message.payload.err.response
     ) {
-      {
-        this.setState({
-          response: nextProps.signUp.message.payload.err.response.data.errors,
-          dialogVisible: true,
-        });
-      }
+      this.setState({
+        response: nextProps.signUp.message.payload.err.response.data.errors,
+        dialogVisible: true,
+      });
     }
   }
 
@@ -356,16 +355,19 @@ class SignUp extends Component<Props, State> {
       placeholderTextColor={placeholderTextColor}
     />
   );
-  onInputCompleted = (text) => {
-    console.log(text);
-    if (this.state.smsCode !== '' && this.state.smsCode === text) {
-      this.setState({ smsValidationDialogVisible: false });
-      this.setState({ smsValidatorMessage: 'Başarılı!' });
-      const { onClickLoginButton } = this.props;
-      onClickLoginButton();
-    } else {
-      this.setState({ smsValidatorMessage: 'Yanlış Kod' });
-    }
+  onInputCompleted = (otp) => {
+    debugger;
+    activeteUser(otp, this.state.phone.value).then((response) => {
+      debugger;
+      if (response && response === true) {
+        this.setState({ smsValidationDialogVisible: false });
+        this.setState({ smsValidatorMessage: 'Başarılı!' });
+        const { onClickLoginButton } = this.props;
+        onClickLoginButton();
+      } else {
+        this.setState({ smsValidatorMessage: 'Yanlış Kod' });
+      }
+    });
   };
 
   onInputChangeText = (text) => {
@@ -420,7 +422,7 @@ class SignUp extends Component<Props, State> {
           <SMSVerifyCode
             onInputCompleted={this.onInputCompleted}
             onInputChangeText={this.onInputChangeText}
-            verifyCodeLength={3}
+            verifyCodeLength={4}
             containerPaddingVertical={20}
             codeFontSize={20}
             containerPaddingHorizontal={50}

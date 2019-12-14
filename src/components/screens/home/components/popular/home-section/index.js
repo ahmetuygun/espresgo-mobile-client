@@ -9,7 +9,7 @@ import PopularSectionListItem from './PopularSectionListItem';
 const Container = styled(View)`
   justify-content: space-between;
   width: 100%;
-  padding-top: 15px;
+  padding-top: ${({ theme }) => `${theme.metrics.extraSmallSize}px`};
 `;
 
 const ListWrapper = styled(View)`
@@ -18,10 +18,11 @@ const ListWrapper = styled(View)`
 `;
 
 type Props = {
-  coffee: Array<Object>,
+  product: Array<Object>,
+  medium: boolean,
 };
 
-const PopularSection = ({ coffee }: Props): Object => (
+const PopularSection = ({ product, medium }: Props): Object => (
   <Container>
     <ListWrapper>
       <FlatList
@@ -32,11 +33,12 @@ const PopularSection = ({ coffee }: Props): Object => (
             price={item.price}
             title={item.title}
             id={item.id}
+            medium={medium}
           />
         )}
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.id}
-        data={coffee.list}
+        data={product}
         horizontal
       />
     </ListWrapper>

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
+import CONSTANTS from '~/utils/CONSTANTS';
 
 import SeeAllPopular from './SeeAllPopular';
 
@@ -14,17 +15,32 @@ type Props = {
 };
 
 class SeeAllPopularContainer extends Component<Props, {}> {
-  componentDidMount() {
-    const { requestCoffee } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+    };
+  }
 
-    requestCoffee();
+  componentDidMount() {
+    const { navigation } = this.props;
+    debugger;
+    const list = navigation.getParam(CONSTANTS.SEE_ALL_LIST, '');
+    debugger;
+    this.setState({
+      list,
+    });
   }
 
   render() {
-    const { coffee } = this.props;
-    return <SeeAllPopular
-      {...coffee}
-    />;
+    const { list } = this.state;
+    return (
+      <SeeAllPopular
+        list={list}
+        loading={list.length === 0}
+        error={false}
+      />
+    );
   }
 }
 

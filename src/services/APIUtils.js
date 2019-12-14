@@ -81,6 +81,13 @@ export function getCompanyByBuilding(buildingId) {
   });
 }
 
+export async function activeteUser(otp, to) {
+  return request({
+    url: `${API_BASE_URL}/auth/activateUser?otp=${otp}&to=${to}`,
+    method: 'GET',
+  });
+}
+
 export function hasAddress(accessToken) {
   return request(
     {
