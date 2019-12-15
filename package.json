@@ -10,7 +10,6 @@
     "test": "jest",
     "flow": "flow"
   },
-
   "rnpm": {
     "assets": [
       "./assets/fonts/"

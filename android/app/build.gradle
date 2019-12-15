@@ -149,8 +149,7 @@ android {
 
 dependencies {
     compile project(':react-native-vector-icons')
-    compile project(':react-native-maps')
-	compile project(':react-native-vector-icons')
+  	compile project(':react-native-vector-icons')
     compile project(':react-native-fast-image')
     compile project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -158,8 +157,15 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-fast-image')
     compile project(':react-native-linear-gradient')
-    implementation project(':react-native-maps')
     compile project(':react-native-splash-screen')
+
+    implementation(project(':react-native-maps')){
+                exclude group: 'com.google.android.gms', module: 'play-services-base'
+                exclude group: 'com.google.android.gms', module: 'play-services-maps'
+            }
+     implementation 'com.google.android.gms:play-services-base:11.0.4'
+     implementation 'com.google.android.gms:play-services-maps:11.0.4'
+
 }
 
 // Run this once to be able to run the application with BUCK
