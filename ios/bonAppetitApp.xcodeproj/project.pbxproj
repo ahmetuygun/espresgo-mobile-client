@@ -49,7 +49,6 @@
 		63C97DEF456D4A5AA891B3BA /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8786EC721EC34BF19A990684 /* MaterialIcons.ttf */; };
 		7BF822EAF58F4213B3F15B9B /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5A705C179774911A6F08BF9 /* FontAwesome5_Regular.ttf */; };
 		7C33BD78114349518007AD21 /* RNModalPicker-tvOSTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = 1052C443DAC24043978B5B0F /* RNModalPicker-tvOSTests.xctest */; };
-		7E4A9C4A6A9349DB9F2ECC2F /* RNModalPickerTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = A21190C1E6C24532B99CFAF7 /* RNModalPickerTests.xctest */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8AFE7CA8D0E246898FA6009A /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE48D6789D13413DB09EE397 /* AntDesign.ttf */; };
 		8B2BA24FC28B4FE9B4CE1949 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 946468DD9D1F4318A235CD25 /* EvilIcons.ttf */; };
@@ -66,7 +65,6 @@
 		DDE2BA88C84710FEE69FC023 /* libPods-bonAppetitApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB0CBC2ADA3968A4025DF36E /* libPods-bonAppetitApp.a */; };
 		E1E77FDD8AC648C193237D92 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A056E185D30A4A8DA994679F /* Octicons.ttf */; };
 		EAF3D5646D5F4E7C8B8CDA93 /* CircularStd-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8854F92E0F314321BA382015 /* CircularStd-Bold.otf */; };
-		F2F37263C02B4818B619D770 /* RNModalPicker.app in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF44F1256DF4ABDA1B9D36E /* RNModalPicker.app */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -436,7 +434,6 @@
 		CD4B7241337B4A22BE5B075A /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		CE48D6789D13413DB09EE397 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		DAF44F1256DF4ABDA1B9D36E /* RNModalPicker.app */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RNModalPicker.app; sourceTree = "<group>"; };
-		E5837A5A8114475695051253 /* RNModalPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNModalPicker.xcodeproj; path = "../node_modules/rn-modal-picker/ios/RNModalPicker.xcodeproj"; sourceTree = "<group>"; };
 		EFACC0785B92497C98C050DA /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		FB0CBC2ADA3968A4025DF36E /* libPods-bonAppetitApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bonAppetitApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCE34DDCD6286B51EC715E08 /* Pods-bonAppetitApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bonAppetitApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-bonAppetitApp/Pods-bonAppetitApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -472,8 +469,6 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				D5F0075A50FF49CF877F7414 /* libRNGestureHandler.a in Frameworks */,
 				DDE2BA88C84710FEE69FC023 /* libPods-bonAppetitApp.a in Frameworks */,
-				F2F37263C02B4818B619D770 /* RNModalPicker.app in Frameworks */,
-				7E4A9C4A6A9349DB9F2ECC2F /* RNModalPickerTests.xctest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,7 +662,6 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				912F7B068E03419D89160886 /* RNGestureHandler.xcodeproj */,
-				E5837A5A8114475695051253 /* RNModalPicker.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -829,6 +823,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				A16BD86D916CC8EC21A6ED68 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1366,6 +1361,52 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		A16BD86D916CC8EC21A6ED68 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-bonAppetitApp/Pods-bonAppetitApp-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-bonAppetitApp/Pods-bonAppetitApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		D05CDF830CE6C87A1F6CCA77 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
