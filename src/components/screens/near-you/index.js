@@ -58,7 +58,7 @@ class NearYouContainer extends Component<Props, State> {
     },
   };
 
-  async componentDidMount() {
+   componentDidMount() {
     const { requestVehicleLocation, setMyLocation } = this.props;
     navigator.geolocation.getCurrentPosition(
       (position) => {
