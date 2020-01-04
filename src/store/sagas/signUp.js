@@ -27,7 +27,6 @@ export function* signUpRequest(action) {
     );
     yield put(SignUpActions.signUpSuccess(response.data));
   } catch (err) {
-    debugger;
     yield put(SignUpActions.signUpFailure(err));
   }
 }

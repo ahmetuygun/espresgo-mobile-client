@@ -32,7 +32,6 @@ export function* setMyLocation(action) {
       latitude,
       longitude,
     };
-    debugger;
     const response = yield call(
       apiLogin.post,
       '/location/inserUserLocation',

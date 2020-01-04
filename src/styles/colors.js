@@ -1,5 +1,5 @@
 export default {
-  primaryColor: '#50211B',
+  primaryColor: '#DE3C4B',
   dark: '#303030',
   darkText: 'rgba(0, 0, 0, 0.8)',
   intermediateDarkLayer: 'rgba(0, 0, 0, 0.65)',
@@ -18,7 +18,7 @@ export default {
   transparentGray: 'rgba(218, 218, 218, 0.5)',
   progressiveImageForeground: 'rgba(242, 242, 242, 0.5)',
   transparentGrayx: '#DADADA',
-  androidToolbarColor: '#50211B',
+  androidToolbarColor: '#a60023',
   facebook: '#3B5998',
   googlePlus: '#DD4B39',
   inactiveSwitch: 'rgba(0, 0, 0, 0.38)',

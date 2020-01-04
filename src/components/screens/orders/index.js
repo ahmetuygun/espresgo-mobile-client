@@ -1,32 +1,21 @@
 // @flow
 
-import React, { Component } from 'react';
-import {
-  AsyncStorage,
-  Platform,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {Component} from 'react';
+import {AsyncStorage, Platform, ScrollView, Text, TouchableOpacity, View,} from 'react-native';
 import styled from 'styled-components';
+import Dialog, {DialogContent, DialogTitle} from "react-native-popup-dialog";
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
-import {
-  getBuildingByDistrict,
-  getCities,
-  getCompanyByBuilding,
-  getDistrictByCity,
-} from '~/services/APIUtils';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Creators as CoffeeCreators} from '~/store/ducks/coffee';
+import {getBuildingByDistrict, getCities, getCompanyByBuilding, getDistrictByCity,} from '~/services/APIUtils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ButtonContent from '../login/components/ButtonContent';
-import { DefaultText } from '../login/components/Common';
+import {DefaultText} from '../login/components/Common';
 import appStyles from '~/styles';
 import Loading from '~/components/common/Loading';
-import { Alert, TYPES } from '~/components/common/alert';
-import { ROUTE_NAMES } from '../../../routes';
+import {Alert, TYPES} from '~/components/common/alert';
+import {ROUTE_NAMES} from '../../../routes';
 
 const Container = styled(View)`
   flex: 1;
@@ -116,6 +105,8 @@ class Orders extends Component<Props, State> {
       update: false,
       orderList: [],
       token: {},
+      dialogVisible : false,
+      dialogMessage: ''
     };
   }
 
@@ -143,6 +134,11 @@ class Orders extends Component<Props, State> {
     const { orders } = this.props.coffee;
     const list = [];
 
+    this.setState({
+      dialogVisible: false,
+      dialogMessage: ''
+    })
+
     orders.map((order) => {
       let price = order.order.coffeeDetail.startPrice;
 
@@ -161,7 +157,6 @@ class Orders extends Component<Props, State> {
 
     AsyncStorage.getItem('accessToken')
       .then((data) => {
-        debugger;
         if (data) {
           orderCoffee(list, data);
         }
@@ -227,6 +222,7 @@ class Orders extends Component<Props, State> {
   renderOrderCheckList = (orders) => {
     let totalPrice = 0.0;
     const { buttonStyle } = styles;
+    debugger;
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -263,24 +259,42 @@ class Orders extends Component<Props, State> {
             <DefaultText>Sipariş Ver</DefaultText>
           </ButtonContent>
         </View>
+
+
+
       </ScrollView>
     );
   };
 
   componentWillReceiveProps(nextProps) {
-    const { refreshHistory } = nextProps.coffee;
+    const { refreshHistory, orderResult,} = nextProps.coffee;
     const { requestHistory } = this.props;
+
+    debugger;
 
     if (refreshHistory === true) {
       AsyncStorage.getItem('accessToken')
         .then((data) => {
-          debugger;
           if (data) {
             requestHistory(data);
           }
         })
         .catch((err) => {});
     }
+
+
+    if (orderResult && orderResult.responseCode && orderResult.responseCode === 102) {
+      this.setState({
+        dialogVisible: true,
+        dialogMessage: orderResult.message
+      })
+    } else if (this.state.dialogVisible) {
+      this.setState({
+        dialogVisible: false,
+        dialogMessage: ''
+      })
+    }
+
   }
 
   okButtonAfterSuccess() {
@@ -288,7 +302,6 @@ class Orders extends Component<Props, State> {
     refreshAll();
     navigation.goBack(null);
     navigation.navigate(ROUTE_NAMES.MAIN_STACK);
-    debugger;
   }
   renderText = (text1, text2) => (
     <OptionWithouDescriptionWrapper>
@@ -383,6 +396,11 @@ class Orders extends Component<Props, State> {
       orders, loading, error, orderResult, history,
     } = this.props.coffee;
 
+
+
+
+    debugger;
+
     return (
       <Container>
         {loading && <Loading />}
@@ -392,18 +410,33 @@ class Orders extends Component<Props, State> {
         {orders.length > 0
           && !loading
           && !error
-          && (!orderResult.responseCode || orderResult.responseCode === 0)
+          && (!orderResult.responseCode  || (orderResult.responseCode && orderResult.responseCode !== 100))
           && this.renderOrderCheckList(orders)}
         {!loading
           && !error
           && orderResult.responseCode
           && orderResult.responseCode === 100
-          && this.renderSuccessOrderPage(orderResult)}
+          && this.renderSuccessOrderPage(orderResult )}
         {orders.length === 0
           && !orderResult.responseCode
           && !loading
           && !error
           && this.renderNoOrderPage(history)}
+
+        <Dialog
+          visible={this.state.dialogVisible}
+          onTouchOutside={() => {
+            this.setState({dialogVisible: false});
+          }}
+          dialogTitle={<DialogTitle title="Sipariş Alınamadı!" />}
+        >
+          <DialogContent>
+            <Text numberOfLines={5}>
+              {this.state.dialogMessage}
+            </Text>
+          </DialogContent>
+        </Dialog>
+
       </Container>
     );
   }
