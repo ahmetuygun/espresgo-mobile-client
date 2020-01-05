@@ -79,7 +79,6 @@ export function* closeOrder(action) {
     };
 
     const response = yield call(apiLogin.get, '/util/closeOrder', { headers });
-    debugger;
     yield put(AdminActions.closeOrderSuccess(response.data));
   } catch (err) {
     yield put(AdminActions.closeOrderFailure(err));
@@ -114,7 +113,6 @@ export function* openOrder(action) {
     };
 
     const response = yield call(apiLogin.get, '/util/openOrder', { headers });
-    debugger;
     yield put(AdminActions.openOrderSuccess(response.data));
   } catch (err) {
     yield put(AdminActions.openOrderFailure(err));
@@ -130,7 +128,6 @@ export function* getOrderByUid(action) {
     const getOrderByUidRequest = {
       uid: orderUid,
     };
-    debugger;
     const response = yield call(
       apiLogin.post,
       '/coffee/getOrderByUid',

@@ -201,6 +201,7 @@ const coffee = (state = initialState, { type, payload }) => {
     case Types.ORDER_COFFEE_REQUEST:
       return {
         ...state,
+        orderResult : {},
         loading: true,
         error: false,
       };
@@ -211,7 +212,8 @@ const coffee = (state = initialState, { type, payload }) => {
         orderResult: payload.data,
         loading: false,
         error: false,
-        orders: [],
+        orders: (payload.data.responseCode &&
+          payload.data.responseCode ===102)  ? state.orders : [],
         orderResultSingleCode: 0,
       };
 

@@ -65,12 +65,6 @@ const ApplicationTabs = createMaterialTopTabNavigator(
         tabBarIcon: getTabIcon('account-settings'),
       },
     },
-    [ROUTE_NAMES.ADMIN]: {
-      screen: AdminsRoutes,
-      navigationOptions: {
-        tabBarIcon: getTabIcon('account-settings'),
-      },
-    },
   },
   {
     initialRouteName: ROUTE_NAMES.HOME,

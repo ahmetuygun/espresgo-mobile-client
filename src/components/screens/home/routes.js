@@ -30,7 +30,7 @@ const RootStack = createStackNavigator(
   {
     [ROUTE_NAMES.HOME]: {
       screen: Home,
-      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'espresgo', 'arial', 20),
+      navigationOptions: ({ navigation }) => setDefaultHeaderLayout(navigation, 'Espresgo', 'arial', 20),
     },
 
     [ROUTE_NAMES.SEE_ALL_EVENTS]: {
