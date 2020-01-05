@@ -321,7 +321,6 @@ class SignUp extends Component<Props, State> {
       && nextProps.signUp.message.payload.data
       && nextProps.signUp.message.payload.data.success
     ) {
-      debugger;
       this.validateSms();
     } else if (
       loading == false
@@ -356,9 +355,7 @@ class SignUp extends Component<Props, State> {
     />
   );
   onInputCompleted = (otp) => {
-    debugger;
     activeteUser(otp, this.state.phone.value).then((response) => {
-      debugger;
       if (response && response === true) {
         this.setState({ smsValidationDialogVisible: false });
         this.setState({ smsValidatorMessage: 'Başarılı!' });

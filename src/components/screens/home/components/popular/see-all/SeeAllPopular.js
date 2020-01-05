@@ -23,9 +23,7 @@ type Props = {
 };
 
 const AllYouMightLike = ({ loading, error, list }: Props): Object => {
-  debugger;
   const shouldRenderContent = !loading && !error && list;
-  debugger;
   return (
     <Wrapper>
       {loading && <Loading />}

@@ -16,6 +16,9 @@ import IntroScreen from './components/IntroScreen';
 import { ROUTE_NAMES } from '~/routes/index';
 import appStyles from '~/styles';
 import { hasAddress } from '../../../services/APIUtils';
+import {bindActionCreators} from "redux";
+import { connect } from 'react-redux';
+import { Creators as MapActions } from '~/store/ducks/map';
 
 const Container = styled(View)`
   flex: 1;
@@ -50,7 +53,8 @@ class OnboardingIntro extends Component<Props, State> {
   };
 
   getInitialRouteName = () => {
-    const { navigation } = this.props;
+    const { navigation, setMyLocation } = this.props;
+
     SplashScreen.hide();
     AsyncStorage.getItem('accessToken')
       .then((data) => {
@@ -59,9 +63,26 @@ class OnboardingIntro extends Component<Props, State> {
           hasAddress(data)
             .then((response) => {
               console.log(`response${response}`);
+
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  // user location's latitude and longitude
+                  const latitude = parseFloat(position.coords.latitude);
+                  const longitude = parseFloat(position.coords.longitude);
+                  setMyLocation(
+                    latitude,
+                    longitude,
+                    data,
+                  );
+                },
+                error => console.log('position error!!!', error),
+                { enableHighAccuracy: true, timeout: 30000 },
+              );
+
               if (!response) {
                 navigation.navigate(ROUTE_NAMES.ADDRESS);
               } else {
+
                 navigation.navigate(ROUTE_NAMES.MAIN_STACK);
               }
             })
@@ -76,7 +97,7 @@ class OnboardingIntro extends Component<Props, State> {
                 this.setState({
                   render: true,
                 });
-                // AsyncStorage.setItem('splashScreen', '1');
+                 AsyncStorage.setItem('splashScreen', '1');
               }
             })
             .catch((err2) => {});
@@ -90,7 +111,7 @@ class OnboardingIntro extends Component<Props, State> {
               this.setState({
                 render: true,
               });
-              // AsyncStorage.setItem('splashScreen', '1');
+               AsyncStorage.setItem('splashScreen', '1');
             }
           })
           .catch((err2) => {});
@@ -209,4 +230,15 @@ class OnboardingIntro extends Component<Props, State> {
   }
 }
 
-export default OnboardingIntro;
+
+
+const mapDispatchToProps = dispatch => bindActionCreators(MapActions, dispatch);
+
+const mapStateToProps = state => ({
+  map: state.map,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OnboardingIntro);

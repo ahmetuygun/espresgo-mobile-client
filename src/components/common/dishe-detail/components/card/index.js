@@ -8,11 +8,14 @@ import {
 import styled from 'styled-components';
 import appStyles from '~/styles';
 
+
+
 import { Snackbar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input';
 import Header from './Header';
 import ButtonContent from '../../../../screens/login/components/ButtonContent';
 import { DefaultText } from '../../../../screens/login/components/Common';
+import {Dropdown} from 'react-native-material-dropdown';
 
 const Container = styled(View)`
   flex: 1;
@@ -81,29 +84,25 @@ const Card = ({
         showsVerticalScrollIndicator={false}
       >
         <SubContainer>
-          {selection.map(data => (
+          {selection.map(selectData => (
             <View
-              key={data.id}
+              key={selectData.id}
               style={subContainerStyle}
             >
-              <Text>{data.label}</Text>
-              <View
-                style={pickerStyle}
-              >
-                <Picker
-                  selectedValue={selectedValue[data.type]}
-                  onValueChange={(itemValue) => {
-                    onSelectionChanced(data, itemValue);
+              <View>
+
+                <Dropdown
+                  value={selectedValue[selectData.type]}
+                  onChangeText={(value) => {
+                    onSelectionChanced(selectData, value);
                   }}
-                >
-                  {data.items.map(item => (
-                    <Picker.Item
-                      key={item.id}
-                      label={item.itemName}
-                      value={item.id}
-                    />
-                  ))}
-                </Picker>
+                  label={selectData.label}
+                  valueExtractor={({id}) => id}
+                  labelExtractor={({ itemName}) => itemName}
+                  data={selectData.items}
+                />
+
+
               </View>
             </View>
           ))}
@@ -118,12 +117,8 @@ const Card = ({
           </View>
         </SubContainer>
 
-        <View
-          style={buttonStyle}
-        >
-          <View
-            style={subButtonStyle}
-          >
+        <View style={buttonStyle}>
+          <View style={subButtonStyle}>
             <ButtonContent
               color={appStyles.colors.primaryColor}
               onPress={a => orderAction()}
@@ -160,6 +155,24 @@ const Card = ({
   );
 };
 
+
+const renderDropDown = (
+  dataSource,
+  label,
+  selectedName,
+  selectFunction: function
+): Object => (
+  <Dropdown
+    value={selectedName.name}
+    onChangeText={selectFunction}
+    label={label}
+    valueExtractor={({id}) => id}
+    labelExtractor={({name}) => name}
+    data={dataSource}
+  />
+
+);
+
 const styles = {
   pickerStyle: {
     borderWidth: 1,
@@ -179,15 +192,17 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop:  20,
   },
   subButtonStyle: {
     flex: 1,
     paddingLeft: 3,
     paddingRight: 3,
-    paddingTop: 8,
+    margin: 0
+
   },
   subContainerStyle: {
-    paddingTop: 10,
+
   },
 };
 export default Card;

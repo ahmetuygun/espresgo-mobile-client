@@ -61,7 +61,6 @@ class Home extends Component<Props, State> {
 
   renderMainContent = (data: HomeRequestResult): Object => {
     const { isRefresing } = this.state;
-    debugger;
 
     let coffee = [];
     let sandvic = [];

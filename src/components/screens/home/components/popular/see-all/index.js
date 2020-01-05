@@ -24,9 +24,7 @@ class SeeAllPopularContainer extends Component<Props, {}> {
 
   componentDidMount() {
     const { navigation } = this.props;
-    debugger;
     const list = navigation.getParam(CONSTANTS.SEE_ALL_LIST, '');
-    debugger;
     this.setState({
       list,
     });

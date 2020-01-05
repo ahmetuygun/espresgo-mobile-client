@@ -182,7 +182,6 @@ class NearYouContainer extends Component<Props, State> {
   render() {
     const { vehicleLocation, loading, error } = this.props.map;
 
-    debugger;
     return (
       <Container>
         {loading && <Loading />}

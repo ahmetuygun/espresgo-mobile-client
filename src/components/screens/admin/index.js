@@ -169,8 +169,6 @@ class Admin extends Component<Props, State> {
     Firebase.database()
       .ref('espresgo-test/order/')
       .on('child_added', (snapshot, prevChildKey) => {
-        debugger;
-        console.log('espresgo-test/order... successfull');
         this.setState({
           orderListFirebase: [...this.state.orderListFirebase, snapshot.val()],
         });

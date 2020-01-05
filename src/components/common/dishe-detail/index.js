@@ -132,22 +132,6 @@ class DishDetailContainer extends Component<Props, {}> {
   }
 
   onSelectionChanced(data, itemValue) {
-    if (!this.state.selectionKey[data.type]) {
-      this.setState(prevState => ({
-        selectionKey: {
-          ...prevState.selectionKey,
-          [data.type]: itemValue,
-        },
-      }));
-    } else {
-      this.setState({
-        selectionKey: {
-          ...this.state.selectionKey,
-          [data.type]: itemValue,
-        },
-      });
-    }
-
     if (
       this.state.mySelection.filter(filterItem => filterItem.type === data.type)
         .length !== 0
