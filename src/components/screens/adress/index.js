@@ -342,7 +342,6 @@ class Address extends Component<Props, State> {
   signOut(a) {
 
     this.removeItemValue('accessToken')
-    this.removeItemValue('splashScreen')
 
     const {navigation} = this.props;
     navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
