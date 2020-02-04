@@ -50,7 +50,7 @@ const TitleWrapper = styled(View)`
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('8%')}px;
+  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('3%')}px;
 `;
 
 const BackgroundImage = styled(Image).attrs({
@@ -164,7 +164,11 @@ class Login extends Component {
         {isBackgroundImageLoaded && (
           <Wrapper>
             <TitleWrapper>
-              <Title>espresgo</Title>
+              <Image
+                style={{ width: 400, height:200}}
+                source={require('./logo_login.png')}
+                resizeMode="contain"
+              />
             </TitleWrapper>
             <NavigationTitleWrapper>
               <TouchableOpacity
