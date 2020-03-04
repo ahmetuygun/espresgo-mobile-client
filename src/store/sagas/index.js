@@ -28,6 +28,7 @@ import {
   removeOrderSingle,
   requestCoffee,
   requestCoffeeDetail,
+  applyCampaign
 } from './coffee';
 import { getUserDetail, registerAdress } from './adress';
 import {
@@ -75,7 +76,7 @@ export default function* rootSaga() {
     takeLatest(AdminTypes.OPEN_ORDER_REQUEST, openOrder),
     takeLatest(AdminTypes.UPDATE_ORDER_STATUS_REQUEST, updateOrderStatus),
     takeLatest(AdminTypes.GET_ORDER_BY_UID_REQUEST, getOrderByUid),
-
+    takeLatest(CoffeeType.APPLY_CAMPAIGN_REQUEST, applyCampaign),
     takeLatest(MapTypes.SET_MY_LOCATION_REQUEST, setMyLocation),
     takeLatest(MapTypes.VEHICLE_LOCATION_REQUEST, requestVehicleLocation),
   ]);

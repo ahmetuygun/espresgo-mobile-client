@@ -50,7 +50,7 @@ const TitleWrapper = styled(View)`
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('3%')}px;
+  margin-vertical: ${({ theme }) => theme.metrics.getHeightFromDP('1%')}px;
 `;
 
 const BackgroundImage = styled(Image).attrs({

@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import {AsyncStorage, View} from 'react-native';
 
 import styled from 'styled-components';
 
@@ -356,11 +356,14 @@ class SignUp extends Component<Props, State> {
   );
   onInputCompleted = (otp) => {
     activeteUser(otp, this.state.phone.value).then((response) => {
-      if (response && response === true) {
+      if (response && response.success === true) {
         this.setState({ smsValidationDialogVisible: false });
         this.setState({ smsValidatorMessage: 'Başarılı!' });
-        const { onClickLoginButton } = this.props;
-        onClickLoginButton();
+        AsyncStorage.setItem('accessToken', response.message);
+
+        const { navigation  } = this.props;
+        navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
+
       } else {
         this.setState({ smsValidatorMessage: 'Yanlış Kod' });
       }

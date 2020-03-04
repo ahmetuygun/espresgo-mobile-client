@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   AsyncStorage,
   Platform,
@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as AdminCreators } from '~/store/ducks/admin';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Creators as AdminCreators} from '~/store/ducks/admin';
 import {
   getBuildingByDistrict,
   getCities,
@@ -22,13 +22,14 @@ import {
 } from '~/services/APIUtils';
 import appStyles from '~/styles';
 import Loading from '~/components/common/Loading';
-import { Alert, TYPES } from '~/components/common/alert';
+import {Alert, TYPES} from '~/components/common/alert';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ButtonGroup } from 'react-native-elements';
+import {ButtonGroup} from 'react-native-elements';
 
 import Firebase from 'firebase';
-import { DefaultText } from '../login/components/Common';
+import {DefaultText} from '../login/components/Common';
 import ButtonContent from '../login/components/ButtonContent';
+import {ROUTE_NAMES} from "~/routes";
 
 const firebaseConfig = {
   apiKey: 'AIzaSyASMXtkE-aXVRkUH5_Z3DyFSxvrXlLRl0c',
@@ -39,15 +40,16 @@ const firebaseConfig = {
   messagingSenderId: '667683830429',
   appId: '1:667683830429:web:8845970158a0d835597274',
   measurementId: 'G-HKCDVNZBJZ',
+
 };
 
 const Container = styled(View)`
   flex: 1;
-  padding: ${({ theme }) => theme.metrics.mediumSize}px;
-  background-color: ${({ theme }) => theme.colors.white};
+  padding: ${({theme}) => theme.metrics.mediumSize}px;
+  background-color: ${({theme}) => theme.colors.white};
 `;
 const ItemWrapper = styled(View)`
-  padding: ${({ theme }) => theme.metrics.mediumSize}px;
+  padding: ${({theme}) => theme.metrics.mediumSize}px;
 `;
 const OptionWrapper = styled(View)`
   flex-direction: row;
@@ -55,75 +57,75 @@ const OptionWrapper = styled(View)`
   justify-content: space-between;
 `;
 const SectionTitleText = styled(Text)`
-  color: ${({ theme }) => theme.colors.darkText};
+  color: ${({theme}) => theme.colors.darkText};
   font-family: CircularStd-Bold;
-  font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
-    return theme.metrics.getWidthFromDP(percentage);
-  }}px;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '4.2%' : '4.8%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
 `;
 const SmallText = styled(Text)`
-  color: ${({ theme }) => theme.colors.subText};
-  margin: ${({ theme }) => `${theme.metrics.extraSmallSize}px 0`};
+  color: ${({theme}) => theme.colors.subText};
+  margin: ${({theme}) => `${theme.metrics.extraSmallSize}px 0`};
   font-family: CircularStd-Book;
-  font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
-    return theme.metrics.getWidthFromDP(percentage);
-  }}px;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '3.8%' : '4%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
 `;
 const OptionTextWrapper = styled(View)`
   width: 75%;
 `;
 const OptionTextWrapperBackGround = styled(View)`
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.lightGray};
+  background-color: ${({theme}) => theme.colors.lightGray};
 `;
 
 const LineSeparator = styled(View)`
   width: 100%;
-  height: ${({ theme }) => theme.metrics.getHeightFromDP('0.1%')};
-  background-color: ${({ theme }) => theme.colors.gray};
+  height: ${({theme}) => theme.metrics.getHeightFromDP('0.1%')};
+  background-color: ${({theme}) => theme.colors.gray};
 `;
 const OptionWithouDescriptionWrapper = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: ${({ theme }) => theme.metrics.largeSize}px;
+  margin: ${({theme}) => theme.metrics.largeSize}px;
 `;
 
 const OptionWithouDescriptionWrapperHead = styled(View)`
   align-items: center;
-  margin: ${({ theme }) => theme.metrics.extraLargeSize}px;
+  margin: ${({theme}) => theme.metrics.extraLargeSize}px;
 `;
 
 const MediumText = styled(Text)`
-  color: ${({ theme }) => theme.colors.subText};
-  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
+  color: ${({theme}) => theme.colors.subText};
+  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
-    return theme.metrics.getWidthFromDP(percentage);
-  }}px;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
 `;
 
 const MediumTextGreen = styled(Text)`
-  color: ${({ theme }) => theme.colors.green};
-  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
+  color: ${({theme}) => theme.colors.green};
+  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '7%' : '7%';
-    return theme.metrics.getWidthFromDP(percentage);
-  }}px;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '7%' : '7%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
 `;
 
 const MediumTextBlack = styled(Text)`
-  color: ${({ theme }) => theme.colors.darkText};
-  margin-top: ${({ theme }) => theme.metrics.extraSmallSize};
+  color: ${({theme}) => theme.colors.darkText};
+  margin-top: ${({theme}) => theme.metrics.extraSmallSize};
   font-family: CircularStd-Bold;
-  font-size: ${({ theme }) => {
-    const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
-    return theme.metrics.getWidthFromDP(percentage);
-  }}px;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
 `;
 
 class Admin extends Component<Props, State> {
@@ -153,19 +155,17 @@ class Admin extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    debugger;
     await AsyncStorage.getItem('accessToken')
       .then((token) => {
         if (token) {
-          const { isOrderClosed } = this.props;
-
+          const {isOrderClosed} = this.props;
           isOrderClosed(token);
-          this.setState({
-            token: data,
-          });
         }
       })
-      .catch((err) => {});
-
+      .catch((err) => {
+      });
+    debugger;
     Firebase.database()
       .ref('espresgo-test/order/')
       .on('child_added', (snapshot, prevChildKey) => {
@@ -204,7 +204,7 @@ class Admin extends Component<Props, State> {
 
   componentWillUnmount() {
     // clearInterval(this.interval);
-
+    debugger;
     this.setState({
       detailPage: false,
     });
@@ -311,7 +311,7 @@ class Admin extends Component<Props, State> {
 
   renderOrderCheckList = (orders) => {
     let price = 0.0;
-    const { buttonStyle } = styles;
+    const {buttonStyle} = styles;
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -328,7 +328,7 @@ class Admin extends Component<Props, State> {
             order.amount,
           );
         })}
-        <LineSeparator />
+        <LineSeparator/>
 
         <OptionWithouDescriptionWrapper>
           <MediumText>Toplam</MediumText>
@@ -339,7 +339,7 @@ class Admin extends Component<Props, State> {
   };
 
   selectOrder = (orderUid) => {
-    const { getOrderByUid } = this.props;
+    const {getOrderByUid} = this.props;
 
     AsyncStorage.getItem('accessToken')
       .then((token) => {
@@ -347,7 +347,8 @@ class Admin extends Component<Props, State> {
           getOrderByUid(orderUid, token);
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+      });
 
     this.setState({
       detailPage: true,
@@ -355,7 +356,7 @@ class Admin extends Component<Props, State> {
   };
 
   closeOrder = () => {
-    const { closeOrder, isOrderClosed } = this.props;
+    const {closeOrder, isOrderClosed} = this.props;
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
@@ -365,11 +366,12 @@ class Admin extends Component<Props, State> {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+      });
   };
 
   openOrder = () => {
-    const { openOrder, isOrderClosed } = this.props;
+    const {openOrder, isOrderClosed} = this.props;
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
@@ -379,12 +381,13 @@ class Admin extends Component<Props, State> {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+      });
   };
 
   renderDetail = () => {
-    const { detailOrder } = this.state;
-    const { user, address, statusId } = detailOrder[0];
+    const {detailOrder} = this.state;
+    const {user, address, statusId} = detailOrder[0];
     return (
       <View>
         {this.renderBackButton()}
@@ -400,7 +403,7 @@ class Admin extends Component<Props, State> {
   renderBackButton = () => (
     <ButtonContent
       color={appStyles.colors.primaryColor}
-      onPress={a => this.setState({ detailPage: false })}
+      onPress={a => this.setState({detailPage: false})}
     >
       <DefaultText>Geri</DefaultText>
     </ButtonContent>
@@ -411,7 +414,7 @@ class Admin extends Component<Props, State> {
       color={appStyles.colors.primaryColor}
       onPress={a => this.closeOrder()}
     >
-      <DefaultText>Siparis Alımını Kapat</DefaultText>
+      <DefaultText>Kapalı</DefaultText>
     </ButtonContent>
   );
 
@@ -420,28 +423,36 @@ class Admin extends Component<Props, State> {
       color={appStyles.colors.primaryColor}
       onPress={a => this.openOrder()}
     >
-      <DefaultText>Siparis Alımını Aç</DefaultText>
+      <DefaultText>Açık</DefaultText>
     </ButtonContent>
   );
+
+
+
+  goback() {
+    const {navigation} = this.props;
+    navigation.goBack(null);
+    navigation.navigate(ROUTE_NAMES.MAIN_STACK);
+  }
 
   setLocationButton = () => (
     <ButtonContent
       color={appStyles.colors.primaryColor}
       onPress={a => this.setLocation()}
     >
-      <DefaultText>Konumu İşaretle</DefaultText>
+      <DefaultText>Konum</DefaultText>
     </ButtonContent>
   );
 
   renderOrderStatusButton = () => {
     const buttons = ['Yeni', 'Alındı', 'Gönderildi', 'Teslim'];
-    const { selectedOrderStatus } = this.state;
+    const {selectedOrderStatus} = this.state;
     return (
       <ButtonGroup
         onPress={this.updateSelectedOrderStatus}
         selectedIndex={selectedOrderStatus}
         buttons={buttons}
-        containerStyle={{ height: 50, weight: 100 }}
+        containerStyle={{height: 50, weight: 100}}
       />
     );
   };
@@ -453,18 +464,18 @@ class Admin extends Component<Props, State> {
         onPress={this.updateSelectedOrderStatusDetail}
         selectedIndex={currentOrderStatus}
         buttons={buttons}
-        containerStyle={{ height: 50, weight: 100 }}
+        containerStyle={{height: 50, weight: 100}}
       />
     );
   };
 
   updateSelectedOrderStatus(selectedOrderStatus) {
-    this.setState({ selectedOrderStatus });
+    this.setState({selectedOrderStatus});
   }
 
   updateSelectedOrderStatusDetail(selectedOrderStatusDetail) {
-    const { detailOrder } = this.state;
-    const { updateOrderStatus } = this.props;
+    const {detailOrder} = this.state;
+    const {updateOrderStatus} = this.props;
     const detailOrderObject = detailOrder[0];
     const detailOrderList = [];
     detailOrderObject.statusId = selectedOrderStatusDetail;
@@ -484,7 +495,8 @@ class Admin extends Component<Props, State> {
           );
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+      });
   }
 
   setLocation = () => {
@@ -502,14 +514,15 @@ class Admin extends Component<Props, State> {
         AsyncStorage.getItem('accessToken')
           .then((data) => {
             if (data) {
-              const { setLocation } = this.props;
+              const {setLocation} = this.props;
               setLocation(latitude, longitude, data);
             }
           })
-          .catch((err) => {});
+          .catch((err) => {
+          });
       },
       error => console.log('position error!!!', error),
-      { enableHighAccuracy: true, timeout: 30000 },
+      {enableHighAccuracy: true, timeout: 30000},
     );
   };
 
@@ -540,7 +553,7 @@ class Admin extends Component<Props, State> {
                     item.addessText,
                   )}
                 </TouchableOpacity>
-                <LineSeparator />
+                <LineSeparator/>
               </View>
             ))}
           </ScrollView>
@@ -561,10 +574,10 @@ class Admin extends Component<Props, State> {
   }
 
   render() {
-    const { buttonStyle, subButtonStyle } = styles;
-
-    const { loading, error, orderClosed } = this.props.admin;
-    const { orderListFirebase, selectedOrderStatus } = this.state;
+    const {buttonStyle, subButtonStyle} = styles;
+    debugger;
+    const {loading, error, orderClosed} = this.props.admin;
+    const {orderListFirebase, selectedOrderStatus} = this.state;
 
     let orderList = [];
 
@@ -573,76 +586,81 @@ class Admin extends Component<Props, State> {
         item => parseInt(item.status) === selectedOrderStatus,
       );
     }
-
+    debugger;
     return (
       <Container>
         <ScrollView
           showsVerticalScrollIndicator={false}
         >
-          {loading && <Loading />}
+          {loading && <Loading/>}
           {error && <Alert
             type={TYPES.ERROR_SERVER_CONNECTION}
           />}
 
-          <View
-            style={buttonStyle}
-          >
-            <View
-              style={subButtonStyle}
-            >
+          <View style={buttonStyle}>
+            <View style={subButtonStyle}>
+              <ButtonContent
+                color={appStyles.colors.primaryColor}
+                onPress={a => this.goback()}
+              >
+                <DefaultText>Geri</DefaultText>
+            </ButtonContent>
+            </View>
+            <View style={subButtonStyle}>
               {!this.state.detailPage && this.setLocationButton()}
             </View>
+
             <View
               style={subButtonStyle}
             >
               {!this.state.detailPage
-                && orderClosed
-                && orderClosed.data
-                && this.renderOpenOrderButton()}
+              && orderClosed
+              && orderClosed.data
+              && this.renderOpenOrderButton()}
               {!this.state.detailPage
-                && orderClosed
-                && !orderClosed.data
-                && this.renderCloseOrderButton()}
+              && orderClosed
+              && !orderClosed.data
+              && this.renderCloseOrderButton()}
             </View>
           </View>
 
           {!this.state.detailPage && this.renderOrderStatusButton()}
 
           {!this.state.detailPage
-            && !loading
-            && !error
-            && orderList.length > 0
-            && this.renderAllOrder(orderList, orderClosed)}
+          && !loading
+          && !error
+          && orderList.length > 0
+          && this.renderAllOrder(orderList, orderClosed)}
 
           {this.state.detailPage
-            && this.state.detailOrder.length > 0
-            && !loading
-            && !error
-            && this.renderDetail()}
+          && this.state.detailOrder.length > 0
+          && !loading
+          && !error
+          && this.renderDetail()}
         </ScrollView>
       </Container>
-    );
+  );
   }
-}
+  }
 
-const mapDispatchToProps = dispatch => bindActionCreators(AdminCreators, dispatch);
-const mapStateToProps = state => ({
-  admin: state.admin,
-});
-export default connect(
+  const mapDispatchToProps = dispatch => bindActionCreators(AdminCreators, dispatch);
+  const mapStateToProps = state => ({
+    admin: state.admin,
+  });
+  export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Admin);
-const styles = {
-  containerStyle: {
+  )(Admin);
+  const styles = {
+    containerStyle: {
     paddingTop: 50,
   },
-  pickerStyle: {
+    pickerStyle: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 10,
   },
-  textInputStyle: {
+    textInputStyle: {
     color: '#000',
     paddingRight: 5,
     paddingLeft: 5,
@@ -650,20 +668,20 @@ const styles = {
     lineHeight: 23,
     flex: 2,
   },
-  subContainerStyle: {
+    subContainerStyle: {
     paddingTop: 10,
   },
 
-  buttonStyle: {
+    buttonStyle: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  subButtonStyle: {
+    subButtonStyle: {
     flex: 1,
     paddingLeft: 3,
     paddingRight: 3,
     paddingTop: 8,
   },
-};
+  };

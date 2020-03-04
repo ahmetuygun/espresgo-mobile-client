@@ -13,7 +13,7 @@ export const TYPES = {
 
 const CONFIGS = {
   [TYPES.ERROR_SERVER_CONNECTION]: {
-    middleText: 'İnternetinde bir sorun var.',
+    middleText: 'Bişeyler yanlış gitti',
     bottomText: 'Daha sonra tekrar deneyebilir misin?.',
     iconName: 'server-network-off',
     topText: 'Oops...',

@@ -24,6 +24,10 @@ export const Types = {
   ORDER_HISTORY_FAILURE: 'coffee/ORDER_HISTORY_FAILURE',
 
   REFRESH_ALL: 'coffee/REFRESH_ALL',
+
+  APPLY_CAMPAIGN_REQUEST: 'coffee/APPLY_CAMPAIGN_REQUEST',
+  APPLY_CAMPAIGN_SUCCESS: 'coffee/APPLY_CAMPAIGN_SUCCESS',
+  APPLY_CAMPAIGN_FAILURE: 'coffee/APPLY_CAMPAIGN_FAILURE',
 };
 
 const initialState = {
@@ -36,6 +40,8 @@ const initialState = {
   orders: [],
   orderResultSingleCode: 0,
   refreshHistory: false,
+  applyCampaignResult : {},
+  snackbarVisible : false
 };
 
 export const Creators = {
@@ -80,9 +86,9 @@ export const Creators = {
     type: Types.GET_COFFEE_DETAIL_FAILURE,
   }),
 
-  orderCoffee: (orders, token) => ({
+  orderCoffee: (orders, token, campaignCode) => ({
     type: Types.ORDER_COFFEE_REQUEST,
-    payload: { orders, token },
+    payload: { orders, token, campaignCode },
   }),
 
   orderCoffeeSuccess: data => ({
@@ -127,6 +133,22 @@ export const Creators = {
   refreshAll: () => ({
     type: Types.REFRESH_ALL,
   }),
+
+  applyCampaign: (orders, token,code) => ({
+    type: Types.APPLY_CAMPAIGN_REQUEST,
+    payload: { orders, token,code },
+  }),
+
+  applyCampaignSuccess: data => ({
+    type: Types.APPLY_CAMPAIGN_SUCCESS,
+    payload: { data },
+  }),
+
+  applyCampaignFailure: err => ({
+    type: Types.APPLY_CAMPAIGN_FAILURE,
+    payload: { err },
+  }),
+
 };
 
 const coffee = (state = initialState, { type, payload }) => {
@@ -178,6 +200,7 @@ const coffee = (state = initialState, { type, payload }) => {
       return {
         ...state,
         orderResult: {},
+        coffeeDetail : {},
         loading: true,
         error: false,
       };
@@ -204,6 +227,8 @@ const coffee = (state = initialState, { type, payload }) => {
         orderResult : {},
         loading: true,
         error: false,
+        applyCampaignResult : {},
+        snackbarVisible:false
       };
 
     case Types.ORDER_COFFEE_SUCCESS:
@@ -238,6 +263,7 @@ const coffee = (state = initialState, { type, payload }) => {
         ...state,
         orders: payload.data,
         loading: false,
+        snackbarVisible :true,
         error: false,
         orderResultSingleCode: 100,
       };
@@ -280,6 +306,31 @@ const coffee = (state = initialState, { type, payload }) => {
         orders: [],
         orderResultSingleCode: 0,
         refreshHistory: true,
+        applyCampaignResult : {},
+        snackbarVisible :false
+      };
+    case Types.APPLY_CAMPAIGN_REQUEST:
+      return {
+        ...state,
+        applyCampaignResult : {},
+        loading: true,
+        error: false,
+      };
+
+    case Types.APPLY_CAMPAIGN_SUCCESS:
+      return {
+        ...state,
+        applyCampaignResult: payload.data,
+        loading: false,
+        error: false,
+      };
+
+    case Types.APPLY_CAMPAIGN_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        message: { payload },
       };
     default:
       return state;

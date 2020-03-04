@@ -18,6 +18,7 @@ import PopularSection from './components/popular/home-section';
 
 import Section from './components/Section';
 import { ROUTE_NAMES } from './routes';
+import {Snackbar} from "react-native-paper";
 
 const Container = styled(View)`
   flex: 1;
@@ -40,6 +41,7 @@ type HomeRequestResult = {
 class Home extends Component<Props, State> {
   state = {
     isRefresing: false,
+    snackbarVisible: false
   };
 
   componentWillMount() {
@@ -50,7 +52,16 @@ class Home extends Component<Props, State> {
     const { coffee } = nextProps;
     this.setState({
       isRefresing: false,
+      snackbarVisible : coffee.snackbarVisible
     });
+  }
+
+  componentWillUnmount() {
+
+      this.setState({
+        snackbarVisible : false
+      });
+
   }
 
   requestData = (): void => {
@@ -116,6 +127,23 @@ class Home extends Component<Props, State> {
       </ScrollView>
     );
   };
+  onSnackBarDismis()
+  {
+    this.setState({
+      snackbarVisible: false,
+    });
+  }
+
+  onSnackbarAction()
+  {
+    const {navigation} = this.props;
+    navigation.goBack(null);
+    navigation.navigate("ORDERS");
+    console.log('onSnackbarAction');
+    this.setState({
+      snackbarVisible: false,
+    });
+  }
 
   render() {
     const { coffee } = this.props;
@@ -127,10 +155,24 @@ class Home extends Component<Props, State> {
           type={TYPES.ERROR_SERVER_CONNECTION}
         />}
         {!loading && !error && this.renderMainContent(coffee.coffee)}
+        <Snackbar
+          visible={this.state.snackbarVisible}
+          duration={7000}
+          onDismiss={() => this.onSnackBarDismis()}
+          action={{
+            label: 'Sepete Git',
+            onPress: () => {
+              this.onSnackbarAction();
+            },
+          }}
+        >
+          Siparişiniz sepete eklendi!
+        </Snackbar>
       </Container>
     );
   }
 }
+
 
 const mapStateToProps = state => ({
   coffee: state.coffee,

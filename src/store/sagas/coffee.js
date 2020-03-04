@@ -31,7 +31,7 @@ export function* getHistory(action) {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
-
+    debugger;
     const response = yield call(apiLogin.get, '/coffee/getOrders', { headers });
     yield put(CoffeeActions.requestHistorySuccess(response.data));
   } catch (err) {
@@ -59,9 +59,10 @@ export function* removeOrderSingle(action) {
 
 export function* orderCoffee(action) {
   try {
-    const { orders, token } = action.payload;
+    const { orders, token, campaignCode } = action.payload;
     const order = {
       orders,
+      campaignCode
     };
 
     const headers = {
@@ -78,5 +79,30 @@ export function* orderCoffee(action) {
     yield put(CoffeeActions.orderCoffeeSuccess(response.data));
   } catch (err) {
     yield put(CoffeeActions.orderCoffeeFailure(err));
+  }
+}
+
+export function* applyCampaign(action) {
+  try {
+    const { orders, token, code } = action.payload;
+    const campaign = {
+      orders,
+      campaignCode: code
+    };
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = yield call(
+      apiLogin.post,
+      '/coffee/applyCampaign',
+      JSON.stringify(campaign),
+      { headers },
+    );
+    yield put(CoffeeActions.applyCampaignSuccess(response.data));
+  } catch (err) {
+    yield put(CoffeeActions.applyCampaignFailure(err));
   }
 }

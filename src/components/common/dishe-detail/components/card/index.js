@@ -73,6 +73,7 @@ const Card = ({
     buttonStyle,
     subButtonStyle,
   } = styles;
+  debugger
   return (
     <Container>
       <Header
@@ -101,8 +102,6 @@ const Card = ({
                   labelExtractor={({ itemName}) => itemName}
                   data={selectData.items}
                 />
-
-
               </View>
             </View>
           ))}
@@ -138,19 +137,6 @@ const Card = ({
           </View>
         </View>
       </ScrollView>
-      <Snackbar
-        visible={snackbarVisible}
-        duration={7000}
-        onDismiss={() => onSnackBarDismis()}
-        action={{
-          label: 'Sepete Git',
-          onPress: () => {
-            onSnackbarAction();
-          },
-        }}
-      >
-        Siparişiniz sepete eklendi!
-      </Snackbar>
     </Container>
   );
 };

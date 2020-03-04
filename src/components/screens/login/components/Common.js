@@ -5,6 +5,8 @@ import styled from 'styled-components';
 export const DefaultText = styled(Text)`
   color: ${({ theme, color }) => color || theme.colors.defaultWhite};
   font-family: CircularStd-Black;
+  justify-content: center;
+  align-items: center;
   font-size: ${({ theme }) => theme.metrics.largeSize}px;
 `;
 
