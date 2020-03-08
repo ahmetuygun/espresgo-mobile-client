@@ -17,6 +17,7 @@ import ButtonContent from "../login/components/ButtonContent";
 import {DefaultText} from "../login/components/Common";
 import {TextField} from 'react-native-material-textfield';
 import {Dropdown} from 'react-native-material-dropdown';
+import CONSTANTS from "~/utils/CONSTANTS";
 
 const Container = styled(View)`
   flex: 1;
@@ -42,6 +43,7 @@ class Address extends Component<Props, State> {
 
     this.state = {
       update: false,
+      isAdmin: false,
       cities: [],
       districts: [],
       buildings: [],
@@ -65,7 +67,7 @@ class Address extends Component<Props, State> {
       name: '',
       phone: '',
       email: '',
-      addressDesciption : ''
+      addressDesciption: ''
     }
   };
 
@@ -193,8 +195,8 @@ class Address extends Component<Props, State> {
       })
       .catch((err) => {
       })
-
   }
+
 
   componentWillUpdate(nextProps, nextState) {
     if (this.state.update === false && nextState.update === true) {
@@ -246,6 +248,17 @@ class Address extends Component<Props, State> {
     }
 
     if (!loading && userDetail.userPrincipal) {
+
+      if (userDetail.userPrincipal.authorities) {
+        userDetail.userPrincipal.authorities.map(item => {
+          if (item.authority === "ROLE_ADMIN") {
+            this.setState({
+              isAdmin: true
+            })
+          }
+        })
+      }
+
 
       this.setState({
         name: userDetail.userPrincipal.name,
@@ -329,12 +342,28 @@ class Address extends Component<Props, State> {
     );
   };
 
+  renderAdminButton = () => {
+    const {navigation} = this.props;
+
+    const {subButtonStyle
+    } = Styles;
+
+    return (
+      <View style={subButtonStyle}>
+        <ButtonContent
+          color={appStyles.colors.primaryColor}
+          onPress={(a) => navigation.navigate("ADMIN")}>
+          <DefaultText>Siparişler</DefaultText>
+        </ButtonContent>
+      </View>
+    );
+  };
+
   async removeItemValue(key) {
     try {
       await AsyncStorage.removeItem(key);
       return true;
-    }
-    catch (exception) {
+    } catch (exception) {
       return false;
     }
   }
@@ -348,14 +377,14 @@ class Address extends Component<Props, State> {
   }
 
 
-  renderMain(){
+  renderMain(admin) {
 
     const {
       buttonStyle, subButtonStyle
     } = Styles;
 
-    return(
-      <ScrollView showsVerticalScrollIndicator={false} >
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TextField
           label='İsim'
           value={this.state.name}
@@ -394,6 +423,7 @@ class Address extends Component<Props, State> {
             <View style={subButtonStyle}>
               {this.renderSignOutButton()}
             </View>
+            {admin && this.renderAdminButton()}
           </View>
         </ButtonsContentContainer>
       </ScrollView>
@@ -403,17 +433,17 @@ class Address extends Component<Props, State> {
 
   render() {
 
-    const { loading, error } = this.props.adress;
+    const {loading, error} = this.props.adress;
+    const {isAdmin} = this.state;
 
     return (
       <Container>
-
-        {loading && <Loading />}
+        {loading && <Loading/>}
         {error && <Alert
-          type={TYPES.ERROR_SERVER_CONNECTION}  />}
+          type={TYPES.ERROR_SERVER_CONNECTION}/>}
 
         {!loading
-        && !error && this.renderMain()}
+        && !error && this.renderMain(isAdmin)}
 
       </Container>
     );
@@ -494,8 +524,8 @@ const Styles = StyleSheet.create({
   },
   subButtonStyle: {
     flex: 1,
-    paddingLeft : 3,
-    paddingRight : 3,
+    paddingLeft: 3,
+    paddingRight: 3,
     paddingTop: 8
   },
 });

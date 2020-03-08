@@ -35,11 +35,11 @@ export async function checkEmailAvailability(email) {
   });
 }
 
-export function getCurrentUser() {
+export function getCurrentUser(accessToken) {
   return request({
     url: `${API_BASE_URL}/user/me`,
     method: 'GET',
-  });
+  },accessToken);
 }
 
 export function getUserInfo() {
@@ -88,10 +88,27 @@ export async function activeteUser(otp, to) {
   });
 }
 
+export async function sendCode(to) {
+  return request({
+    url: `${API_BASE_URL}/auth/sendCode?to=${to}`,
+    method: 'GET',
+  });
+}
+
 export function hasAddress(accessToken) {
   return request(
     {
       url: `${API_BASE_URL}/user/hasAddress`,
+      method: 'GET',
+    },
+    accessToken,
+  );
+}
+
+export function isAdmin(accessToken) {
+  return request(
+    {
+      url: `${API_BASE_URL}/user/isAdmin`,
       method: 'GET',
     },
     accessToken,

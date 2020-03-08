@@ -58,12 +58,9 @@ class OnboardingIntro extends Component<Props, State> {
     SplashScreen.hide();
     AsyncStorage.getItem('accessToken')
       .then((data) => {
-        console.log(`token${data}`);
         if (data) {
           hasAddress(data)
             .then((response) => {
-              console.log(`response${response}`);
-
               navigator.geolocation.getCurrentPosition(
                 (position) => {
                   // user location's latitude and longitude

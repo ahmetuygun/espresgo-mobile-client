@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {TouchableOpacity, Animated, View, Text} from 'react-native';
+import {TouchableOpacity, Animated, View, Text, AsyncStorage} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styled from 'styled-components';
@@ -11,7 +11,10 @@ import { DefaultText } from './Common';
 import Input from './Input';
 import { ROUTE_NAMES } from '~/routes';
 
-
+import {
+  activeteUser,
+  sendCode
+} from '../../../../services/APIUtils';
 import { Alert, TYPES } from '~/components/common/alert';
 import Loading from '~/components/common/Loading';
 
@@ -21,6 +24,7 @@ import { connect } from 'react-redux';
 import { Creators as LoginCreators } from '~/store/ducks/login';
 import {withNavigation} from "react-navigation";
 import Dialog, {DialogContent, DialogTitle} from "react-native-popup-dialog";
+import SMSVerifyCode from "react-native-sms-verifycode";
 
 
 const Container = styled(View)`
@@ -88,11 +92,22 @@ class LoginComponent extends Component<Props, State> {
         placeHolderColor: 'aliceblue',
         valid : true
       },
+      phone: {
+        value : '',
+        placeHolder : 'Telefon 5--',
+        placeHolderColor: 'aliceblue',
+        valid : true
+      },
       dialogVisible : false,
       loading : false,
       error : false,
+      forgetPassword : false,
+      smsValidatorMessage: 'Telefonunuza gelen kodu giriniz',
+      smsValidationDialogVisible: false,
 
-    }}
+    }
+
+  }
 
   onChange(n,v) {
 
@@ -111,7 +126,16 @@ class LoginComponent extends Component<Props, State> {
         }
       })
     }
+
+    if(n === 'phone') {
+      this.setState({
+        phone: {
+          value : v
+        }
+      })
+    }
   }
+
 
   validateField = () =>{
 
@@ -132,8 +156,42 @@ class LoginComponent extends Component<Props, State> {
 
 
 
-  handleLogin= (user,pass) =>{
 
+  validatePhone = (phone) => {
+
+    if (phone === '') {
+      return {
+        valid: false,
+        placeHolder: 'Telefon boş olamaz',
+        placeHolderColor: 'tomato',
+      };
+    }
+
+    const PHONE_REGEX = RegExp('^[1-9]{1}[0-9]{9}$');
+    if (!PHONE_REGEX.test(phone)) {
+      return {
+        valid: false,
+        placeHolder: 'Lütfen, başına 0 koymadan 10 haneli olarak girin',
+        placeHolderColor: 'tomato',
+        value: '',
+      };
+    }
+    if (phone.length > 10) {
+      return {
+        valid: false,
+        placeHolder: `Çok uzun, en fazla ${10} karakter olmalı.`,
+        placeHolderColor: 'tomato',
+      };
+    }
+
+    return {
+      valid: true,
+      placeHolderColor: null,
+      placeHolder: null,
+    };
+  };
+
+  handleLogin= (user,pass) =>{
 
     if(user.valid === true && pass.valid === true){
         const { loginRequest } = this.props;
@@ -225,13 +283,11 @@ class LoginComponent extends Component<Props, State> {
     );
 
     return (
-      <ForgotPasswordContainer
-        style={forgotPasswordTextAnimationStyle}
-      >
+      <ForgotPasswordContainer>
         <ForgotPasswordWrapper>
-          <RecoverTextButton>
+          <RecoverTextButton  onPress={() => this.setState({forgetPassword : true})  }>
             <DefaultText
-              color={appStyles.colors.primaryColor}
+              color={appStyles.colors.white}
             >
               Şifremi unuttum
             </DefaultText>
@@ -241,8 +297,132 @@ class LoginComponent extends Component<Props, State> {
     );
   };
 
+  renderLoginText = (): Object => {
+    const forgotPasswordTextAnimationStyle = createAnimationStyle(
+      this._forgotPasswordTextAnimation,
+    );
+
+    return (
+      <ForgotPasswordContainer>
+        <ForgotPasswordWrapper>
+          <RecoverTextButton  onPress={() => this.setState({forgetPassword : false})  }>
+            <DefaultText
+              color={appStyles.colors.white}
+            >
+             Giriş
+            </DefaultText>
+          </RecoverTextButton>
+        </ForgotPasswordWrapper>
+      </ForgotPasswordContainer>
+    );
+  };
 
 
+
+  renderForgetPassword = () => {
+
+    const emailAnimationStyle = createAnimationStyle(
+      this._emailInputFieldAnimation,
+    );
+    return (
+      <Container>
+        {this.renderInput(
+          this.state.phone.placeHolder ,
+          'cellphone',
+          'telephoneNumber',
+          emailAnimationStyle,
+          this.onChange(),
+          'phone',
+          this.state.phone.placeHolderColor
+        )}
+
+        <ButtonContent
+          color={appStyles.colors.primaryColor}
+          onPress = {() =>  {this.validatePhoneNumber()}}
+        >
+          <DefaultText>Kod Gönder</DefaultText>
+        </ButtonContent>
+        {this.renderLoginText()}
+
+        <Dialog
+          visible={this.state.smsValidationDialogVisible}
+          dialogTitle={<DialogTitle
+            title={this.state.smsValidatorMessage}
+          />}
+          onTouchOutside={() => {
+            this.setState({ smsValidationDialogVisible: false });
+          }}
+        >
+          <DialogContent>
+            <SMSVerifyCode
+              onInputCompleted={this.onInputCompleted}
+              onInputChangeText={this.onInputChangeText}
+              verifyCodeLength={4}
+              containerPaddingVertical={20}
+              codeFontSize={20}
+              containerPaddingHorizontal={50}
+              autoFocus
+            />
+          </DialogContent>
+        </Dialog>
+
+        </Container>
+    )
+  }
+
+  onInputCompleted = (otp) => {
+    activeteUser(otp, this.state.phone.value).then((response) => {
+      if (response && response.success === true) {
+        this.setState({ smsValidationDialogVisible: false });
+        this.setState({ smsValidatorMessage: 'Başarılı!' });
+        AsyncStorage.setItem('accessToken', response.message);
+
+        const { navigation  } = this.props;
+        navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
+
+      } else {
+        this.setState({ smsValidatorMessage: 'Yanlış Kod' });
+      }
+    });
+  };
+
+  onInputChangeText = (text) => {
+    console.log('');
+  };
+
+  _sendCode = (a) => {
+    if(a.valid){
+      sendCode(a.value).then((response) => {
+        if (response && response.success === true) {
+          this.setState({ smsValidationDialogVisible: true })
+          this.setState({ smsValidatorMessage: response.message });
+        } else {
+          this.setState({ forgetPasswordErrorMessage: response.message });
+        }
+      }).catch(error => {
+      console.log(error)
+      });;
+
+    }
+
+
+  }
+
+  async validatePhoneNumber() {
+    const phoneValidation = await this.validatePhone(
+      this.state.phone.value,
+    );
+    console.log(this.state.phone);
+    this.setState(
+      {
+        phone: {
+          ...this.state.phone,
+          ...phoneValidation,
+        }}, () => this._sendCode(this.state.phone),
+        )
+
+
+  }
 
   renderMainContent = () => {
 
@@ -313,7 +493,9 @@ render() {
       {this.state.error && <Alert
         type={TYPES.ERROR_SERVER_CONNECTION}
       />}
-      {!this.state.loading && !this.state.error && this.renderMainContent()}
+      {!this.state.forgetPassword && !this.state.loading && !this.state.error && this.renderMainContent()}
+      {this.state.forgetPassword && !this.state.loading && !this.state.error && this.renderForgetPassword()}
+
     </View>
   );
 }

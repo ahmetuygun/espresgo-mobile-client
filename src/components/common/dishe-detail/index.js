@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
-import { AsyncStorage } from 'react-native';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Creators as CoffeeCreators} from '~/store/ducks/coffee';
+import {AsyncStorage} from 'react-native';
 
-import { handleHiddenHeaderStyle } from '~/routes/headerUtils';
+import {handleHiddenHeaderStyle} from '~/routes/headerUtils';
 import DishDetail from './components/DishDetail';
 import CONSTANTS from '~/utils/CONSTANTS';
-import { ROUTE_NAMES } from '../../../routes';
+import {ROUTE_NAMES} from '../../../routes';
 
 type Props = {
   requestDishDetail: Function,
@@ -40,11 +40,11 @@ class DishDetailContainer extends Component<Props, {}> {
   }
 
   componentDidMount() {
-    const { requestCoffeeDetail, navigation } = this.props;
+    const {requestCoffeeDetail, navigation} = this.props;
     const id = navigation.getParam(CONSTANTS.NAVIGATION_PARAM_ID, '');
     this._subscriptionWillFocusEvent = navigation.addListener('willFocus', () => handleHiddenHeaderStyle(navigation, false, false));
     requestCoffeeDetail(id);
-    this.setState({ snackbarVisible: false });
+    this.setState({snackbarVisible: false});
   }
 
   async componentWillReceiveProps(nextProps) {
@@ -54,7 +54,7 @@ class DishDetailContainer extends Component<Props, {}> {
       coffeeDetail,
       orderResultSingleCode,
     } = nextProps.coffee;
-    const { navigation } = this.props;
+    const {navigation} = this.props;
 
     handleHiddenHeaderStyle(navigation, loading, error);
     if (coffeeDetail !== null && coffeeDetail.selection.length > 0) {
@@ -89,7 +89,7 @@ class DishDetailContainer extends Component<Props, {}> {
     }
 
     if (orderResultSingleCode === 100) {
-      this.setState({ snackbarVisible: true });
+      this.setState({snackbarVisible: true});
     }
   }
 
@@ -98,8 +98,8 @@ class DishDetailContainer extends Component<Props, {}> {
   }
 
   order() {
-    const { coffeeDetail, orders } = this.props.coffee;
-    const { orderSingle } = this.props;
+    const {coffeeDetail, orders} = this.props.coffee;
+    const {orderSingle} = this.props;
     const uui = Math.floor(1000 + Math.random() * 9000);
 
     const order = {
@@ -111,79 +111,89 @@ class DishDetailContainer extends Component<Props, {}> {
     };
 
     const list = orders;
-    list.push({ order });
+    list.push({order});
     orderSingle(list);
-  }
-
-  onSnackbarAction() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     navigation.goBack(null);
-    navigation.navigate(ROUTE_NAMES.ORDERS);
-    console.log('onSnackbarAction');
-    this.setState({
-      snackbarVisible: false,
-    });
+    navigation.navigate(ROUTE_NAMES.MAIN_STACK);
+
+
+}
+
+onSnackbarAction()
+{
+  const {navigation} = this.props;
+  navigation.goBack(null);
+  navigation.navigate(ROUTE_NAMES.ORDERS);
+  console.log('onSnackbarAction');
+  this.setState({
+    snackbarVisible: false,
+  });
+}
+
+onSnackBarDismis()
+{
+  this.setState({
+    snackbarVisible: false,
+  });
+}
+
+onSelectionChanced(data, itemValue)
+{
+  if (
+    this.state.mySelection.filter(filterItem => filterItem.type === data.type)
+      .length !== 0
+  ) {
+    this.setState(prevState => ({
+      mySelection: prevState.mySelection.map(el => (el.type === data.type
+        ? {
+          ...el,
+          items: data.items.filter(
+            filterItem => filterItem.id === itemValue,
+          ),
+        }
+        : el)),
+    }));
   }
+}
 
-  onSnackBarDismis() {
-    this.setState({
-      snackbarVisible: false,
-    });
-  }
+amountChanged(amount)
+{
+  this.setState({
+    productAmount: amount,
+  });
+}
 
-  onSelectionChanced(data, itemValue) {
-    if (
-      this.state.mySelection.filter(filterItem => filterItem.type === data.type)
-        .length !== 0
-    ) {
-      this.setState(prevState => ({
-        mySelection: prevState.mySelection.map(el => (el.type === data.type
-          ? {
-            ...el,
-            items: data.items.filter(
-              filterItem => filterItem.id === itemValue,
-            ),
-          }
-          : el)),
-      }));
-    }
-  }
+render()
+{
+  const {
+    navigation, loading, error, coffeeDetail,
+  } = this.props.coffee;
 
-  amountChanged(amount) {
-    this.setState({
-      productAmount: amount,
-    });
-  }
+  let totalPrice = coffeeDetail.startPrice;
+  this.state.mySelection.map((item) => {
+    totalPrice += item.items[0].plusPrice;
+  });
+  totalPrice *= this.state.productAmount;
 
-  render() {
-    const {
-      navigation, loading, error, coffeeDetail,
-    } = this.props.coffee;
-
-    let totalPrice = coffeeDetail.startPrice;
-    this.state.mySelection.map((item) => {
-      totalPrice += item.items[0].plusPrice;
-    });
-    totalPrice *= this.state.productAmount;
-
-    return (
-      <DishDetail
-        navigation={navigation}
-        coffeeDetail={coffeeDetail}
-        loading={loading}
-        error={error}
-        selectedValue={this.state.selectionKey}
-        onSelectionChanced={this.onSelectionChanced}
-        totalPrice={totalPrice}
-        orderAction={this.order}
-        snackbarVisible={this.state.snackbarVisible}
-        onSnackbarAction={this.onSnackbarAction}
-        onSnackBarDismis={this.onSnackBarDismis}
-        amountChanged={this.amountChanged}
-        productAmount={this.state.productAmount}
-      />
-    );
-  }
+  return (
+    <DishDetail
+      navigation={navigation}
+      coffeeDetail={coffeeDetail}
+      loading={loading}
+      error={error}
+      selectedValue={this.state.selectionKey}
+      onSelectionChanced={this.onSelectionChanced}
+      totalPrice={totalPrice}
+      orderAction={this.order}
+      snackbarVisible={this.state.snackbarVisible}
+      onSnackbarAction={this.onSnackbarAction}
+      onSnackBarDismis={this.onSnackBarDismis}
+      amountChanged={this.amountChanged}
+      productAmount={this.state.productAmount}
+    />
+  );
+}
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators(CoffeeCreators, dispatch);
