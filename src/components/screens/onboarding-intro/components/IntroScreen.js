@@ -22,7 +22,7 @@ const Title = styled(Text)`
   padding-bottom: ${({ theme }) => theme.metrics.smallSize}px;
   font-size: ${({ theme }) => theme.metrics.getWidthFromDP('7,5%')}px;
   font-family: CircularStd-Black;
-  color: ${({ theme }) => theme.colors.primaryColor};
+  color: ${({ theme }) => theme.colors.red};
 `;
 
 const Description = styled(Text)`

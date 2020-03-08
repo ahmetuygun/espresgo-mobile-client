@@ -56,66 +56,9 @@ class OnboardingIntro extends Component<Props, State> {
     const { navigation, setMyLocation } = this.props;
 
     SplashScreen.hide();
-    AsyncStorage.getItem('accessToken')
-      .then((data) => {
-        console.log(`token${data}`);
-        if (data) {
-          hasAddress(data)
-            .then((response) => {
-              console.log(`response${response}`);
-
-              navigator.geolocation.getCurrentPosition(
-                (position) => {
-                  // user location's latitude and longitude
-                  const latitude = parseFloat(position.coords.latitude);
-                  const longitude = parseFloat(position.coords.longitude);
-                  setMyLocation(
-                    latitude,
-                    longitude,
-                    data,
-                  );
-                },
-                error => console.log('position error!!!', error),
-                { enableHighAccuracy: true, timeout: 30000 },
-              );
-
-              if (!response) {
-                navigation.navigate(ROUTE_NAMES.ADDRESS);
-              } else {
-
-                navigation.navigate(ROUTE_NAMES.MAIN_STACK);
-              }
-            })
-            .catch((error) => {
-              navigation.navigate(ROUTE_NAMES.LOGIN);
-            });
-        } else {
-          AsyncStorage.getItem('splashScreen')
-            .then((data2) => {
-              if (data2) navigation.navigate(ROUTE_NAMES.LOGIN);
-              else {
-                this.setState({
-                  render: true,
-                });
-                 AsyncStorage.setItem('splashScreen', '1');
-              }
-            })
-            .catch((err2) => {});
-        }
-      })
-      .catch((err) => {
-        AsyncStorage.getItem('splashScreen')
-          .then((data2) => {
-            if (data2) navigation.navigate(ROUTE_NAMES.LOGIN);
-            else {
-              this.setState({
-                render: true,
-              });
-               AsyncStorage.setItem('splashScreen', '1');
-            }
-          })
-          .catch((err2) => {});
-      });
+    this.setState({
+      render: true,
+    });
   };
 
   componentWillMount() {
