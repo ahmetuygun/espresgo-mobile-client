@@ -313,7 +313,7 @@ class Orders extends Component<Props, State> {
       return (
         <View>
           <OptionWithouDescriptionWrapper>
-            <MediumTextGreenSmall>{applyCampaignResult.label}:</MediumTextGreenSmall>
+            <MediumTextGreenSmall>{applyCampaignResult.label}</MediumTextGreenSmall>
             <MediumTextGreenSmall>-{applyCampaignResult.discountAmount.toFixed(2)}</MediumTextGreenSmall>
           </OptionWithouDescriptionWrapper>
         </View>

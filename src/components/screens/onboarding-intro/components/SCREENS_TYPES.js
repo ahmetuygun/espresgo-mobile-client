@@ -22,8 +22,8 @@ export const SCREENS = {
   },
 
   [TYPES.THREE]: {
-    title: 'Hoşgeldin kahve sever!',
-    description: 'İlk kahven hediye.',
+    title: 'Hoşgeldin kahve sever! İlk kahven hediye.',
+    description: ' Kapmanya Kodu : ILKKAHVE2020',
     image:
       'https://firebasestorage.googleapis.com/v0/b/espresgo-e742e.appspot.com/o/2.jpg?alt=media',
   },

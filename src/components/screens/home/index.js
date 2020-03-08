@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { RefreshControl, ScrollView, View } from 'react-native';
+import {Platform, RefreshControl, ScrollView, Text, View, Linking} from 'react-native';
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
@@ -34,6 +34,19 @@ type State = {
   isRefresing: bYouMightLikeSectionoolean,
 };
 
+const OptionWithouDescriptionWrapperHead = styled(View)`
+  align-items: center;
+
+`;
+const MediumText = styled(Text)`
+  color: ${({theme}) => theme.colors.green};
+  margin-top: ${({theme}) => theme.metrics.smallSize};
+  font-family: CircularStd-Bold;
+  font-size: ${({theme}) => {
+  const percentage = Platform.OS === 'ios' ? '4%' : '4.5%';
+  return theme.metrics.getWidthFromDP(percentage);
+}}px;
+`;
 type HomeRequestResult = {
   list: Object,
 };
@@ -43,6 +56,8 @@ class Home extends Component<Props, State> {
     isRefresing: false,
     snackbarVisible: false
   };
+
+
 
   componentWillMount() {
     this.requestData();
@@ -94,6 +109,9 @@ class Home extends Component<Props, State> {
           />
         }
       >
+        <OptionWithouDescriptionWrapperHead>
+          <MediumText  onPress={()=>{Linking.openURL('whatsapp://send?text='+'&phone=905303139844')}} >Whatsapp'dan yaz</MediumText>
+        </OptionWithouDescriptionWrapperHead>
         <Section
           nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
           product={coffee}

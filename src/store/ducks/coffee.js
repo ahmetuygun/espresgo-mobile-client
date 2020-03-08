@@ -313,6 +313,7 @@ const coffee = (state = initialState, { type, payload }) => {
       return {
         ...state,
         applyCampaignResult : {},
+        orderResult :{},
         loading: true,
         error: false,
       };
