@@ -1578,7 +1578,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Ahmet Uygun (48V2RHNH7S)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Ahmet Uygun (48V2RHNH7S)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 48V2RHNH7S;
 				HEADER_SEARCH_PATHS = (
@@ -1591,7 +1591,7 @@
 				INFOPLIST_FILE = bonAppetitApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1613,7 +1613,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Ahmet Uygun (48V2RHNH7S)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Ahmet Uygun (48V2RHNH7S)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = 48V2RHNH7S;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1625,7 +1625,7 @@
 				INFOPLIST_FILE = bonAppetitApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
