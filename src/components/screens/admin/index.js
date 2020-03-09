@@ -7,7 +7,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View,Linking
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -224,18 +224,36 @@ class Admin extends Component<Props, State> {
       <OptionWrapper>
         <OptionTextWrapperBackGround>
           <MediumText>Kişi Bilgisi</MediumText>
-          <SmallText>
+          <SmallText >
             {' '}
             {`İsim: ${name}`}
           </SmallText>
-          <SmallText>
+          <SmallText onPress={()=>{Linking.openURL(`tel:+90${phone}`)}} >
             {' '}
             {`Telefon: ${phone}`}
+          </SmallText>
+          <SmallText onPress={()=>{Linking.openURL('whatsapp://send?text='+'&phone=90'+ phone)}} >
+            {' '}
+            {`Whatsapp: ${phone}`}
           </SmallText>
           <SmallText>
             {' '}
             {`Email: ${email}`}
           </SmallText>
+        </OptionTextWrapperBackGround>
+      </OptionWrapper>
+    </ItemWrapper>
+  );
+
+  renderDate = (date) => (
+    <ItemWrapper>
+      <OptionWrapper>
+        <OptionTextWrapperBackGround>
+          <SmallText>
+            {' '}
+            {`Siparis tarihi: ${date}`}
+          </SmallText>
+
         </OptionTextWrapperBackGround>
       </OptionWrapper>
     </ItemWrapper>
@@ -387,22 +405,25 @@ class Admin extends Component<Props, State> {
 
   renderDetail = () => {
     const {detailOrder} = this.state;
-    const {user, address, statusId} = detailOrder[0];
+    const {user, address, statusId,orderDate} = detailOrder[0];
     return (
       <View>
         {this.renderBackButton()}
         {this.renderOrderStatusButtonDetail(statusId)}
 
         {this.renderOrderCheckList(detailOrder)}
+        {orderDate && this.renderDate(orderDate)}
+
         {user && this.renderPersonInfo(user.name, user.username, user.email)}
         {address && this.renderAddressInfo(address)}
+
       </View>
     );
   };
 
   renderBackButton = () => (
     <ButtonContent
-      color={appStyles.colors.primaryColor}
+      color={appStyles.colors.green}
       onPress={a => this.setState({detailPage: false})}
     >
       <DefaultText>Geri</DefaultText>
@@ -414,7 +435,7 @@ class Admin extends Component<Props, State> {
       color={appStyles.colors.primaryColor}
       onPress={a => this.closeOrder()}
     >
-      <DefaultText>Kapalı</DefaultText>
+      <DefaultText>Kapat</DefaultText>
     </ButtonContent>
   );
 
@@ -423,7 +444,7 @@ class Admin extends Component<Props, State> {
       color={appStyles.colors.primaryColor}
       onPress={a => this.openOrder()}
     >
-      <DefaultText>Açık</DefaultText>
+      <DefaultText>Aç</DefaultText>
     </ButtonContent>
   );
 
@@ -598,14 +619,14 @@ class Admin extends Component<Props, State> {
           />}
 
           <View style={buttonStyle}>
-            <View style={subButtonStyle}>
+            {!this.state.detailPage && <View style={subButtonStyle}>
               <ButtonContent
                 color={appStyles.colors.primaryColor}
                 onPress={a => this.goback()}
               >
                 <DefaultText>Geri</DefaultText>
             </ButtonContent>
-            </View>
+            </View>}
             <View style={subButtonStyle}>
               {!this.state.detailPage && this.setLocationButton()}
             </View>
