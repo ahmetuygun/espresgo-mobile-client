@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import {Platform, RefreshControl, ScrollView, Text, View, Linking} from 'react-native';
+import {Platform, RefreshControl, ScrollView, Text, View, Linking, AsyncStorage} from 'react-native';
 import styled from 'styled-components';
 
 import { bindActionCreators } from 'redux';
@@ -10,6 +10,11 @@ import { Creators as CoffeeCreators } from '~/store/ducks/coffee';
 
 import { persistItemInStorage } from '~/utils/AsyncStoarageManager';
 import appStyles from '~/styles';
+
+import {
+  activeteUser,
+  getWhatsAppNumber
+} from '../../../services/APIUtils';
 
 import { Alert, TYPES } from '~/components/common/alert';
 import Loading from '~/components/common/Loading';
@@ -85,6 +90,18 @@ class Home extends Component<Props, State> {
     requestCoffee();
   };
 
+  redirectWhatsapp = (): void => {
+    getWhatsAppNumber().then((number) => {
+      if (number) {
+
+        Linking.openURL('whatsapp://send?text='+'&phone='+number)
+
+      } else {
+      }
+    });
+
+  };
+
   renderMainContent = (data: HomeRequestResult): Object => {
     const { isRefresing } = this.state;
 
@@ -110,7 +127,7 @@ class Home extends Component<Props, State> {
         }
       >
         <OptionWithouDescriptionWrapperHead>
-          <MediumText  onPress={()=>{Linking.openURL('whatsapp://send?text='+'&phone=905303139844')}} >Whatsapp'dan yaz</MediumText>
+          <MediumText  onPress={()=>{this.redirectWhatsapp()}} >Whatsapp'dan yaz</MediumText>
         </OptionWithouDescriptionWrapperHead>
         <Section
           nextRoute={ROUTE_NAMES.POPULAR_SEE_ALL}
@@ -175,7 +192,7 @@ class Home extends Component<Props, State> {
         {!loading && !error && this.renderMainContent(coffee.coffee)}
         <Snackbar
           visible={this.state.snackbarVisible}
-          duration={7000}
+          duration={6000}
           onDismiss={() => this.onSnackBarDismis()}
           action={{
             label: 'Sepete Git',

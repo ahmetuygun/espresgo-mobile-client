@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   package="com.bonappetitapp"
-  android:versionCode="10"
-  android:versionName="10.0">
+  android:versionCode="11"
+  android:versionName="11.0">
 
   <uses-sdk android:maxSdkVersion="28" />
 
