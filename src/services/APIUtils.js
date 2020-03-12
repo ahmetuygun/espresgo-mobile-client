@@ -105,6 +105,14 @@ export function hasAddress(accessToken) {
   );
 }
 
+
+export async function getWhatsAppNumber() {
+  return request({
+    url: `${API_BASE_URL}/util/getWhatsAppNumber`,
+    method: 'GET',
+  });
+}
+
 export function isAdmin(accessToken) {
   return request(
     {
