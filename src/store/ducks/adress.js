@@ -11,10 +11,13 @@ export const Types = {
 };
 
 const initialState = Immutable({
-  loading: false,
-  error: false,
-  message: '',
+  loadingUserDetail: false,
+  errorUserDetail: false,
+  messageUserDetail: '',
   userDetail: {},
+  loadingAddress: false,
+  errorAddress :false,
+  registered: false,
 });
 
 export const Creators = {
@@ -75,47 +78,48 @@ const adress = (state = initialState, { type, payload }) => {
       return {
         ...state,
         registered: false,
-        loading: true,
-        error: false,
+        loadingAddress: true,
+        errorAddress: false,
       };
 
     case Types.REGISTER_ADDRESS_SUCCESS:
       return {
         ...state,
         registered: true,
-        error: false,
-        loading: false,
+        errorAddress: false,
+        loadingAddress: false,
       };
 
     case Types.REGISTER_ADDRESS_FAILURE:
       return {
         ...state,
         registered: false,
-        loading: false,
-        error: true,
+        loadingAddress: false,
+        errorAddress: true,
         message: { payload },
       };
 
     case Types.USER_DETAIL_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: false,
+        loadingUserDetail: true,
+        registered: false,
+        errorUserDetail: false,
       };
 
     case Types.USER_DETAIL_SUCCESS:
       return {
         ...state,
         userDetail: payload.data,
-        error: false,
-        loading: false,
+        errorUserDetail: false,
+        loadingUserDetail: false,
       };
 
     case Types.USER_DETAIL_FAILURE:
       return {
         ...state,
-        loading: false,
-        error: true,
+        loadingUserDetail: false,
+        errorUserDetail: true,
         message: { payload },
       };
     default:

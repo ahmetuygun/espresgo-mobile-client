@@ -193,6 +193,8 @@ class Orders extends Component<Props, State> {
       .then((data) => {
         if (data) {
           applyCampaign(list, data, code);
+        }else{
+          navigation.navigate(ROUTE_NAMES.LOGIN);
         }
       })
       .catch((err) => {
@@ -202,7 +204,7 @@ class Orders extends Component<Props, State> {
 
 
   orderAction() {
-    const {orderCoffee} = this.props;
+    const {orderCoffee,navigation} = this.props;
     const {orders} = this.props.coffee;
     const list = [];
 
@@ -235,9 +237,12 @@ class Orders extends Component<Props, State> {
             applyCampaignResult : {},
             campaignCode : ''
           });
+        }else{
+          navigation.navigate(ROUTE_NAMES.LOGIN);
         }
       })
       .catch((err) => {
+        navigation.navigate(ROUTE_NAMES.LOGIN);
       });
   }
 

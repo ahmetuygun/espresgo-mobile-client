@@ -37,7 +37,7 @@ type Props = {
 const GetStartedButton = ({ navigation }: Props): Object => (
   <ButtonWrapper>
     <Button
-      onPress={() => navigation.navigate(ROUTE_NAMES.LOGIN)}
+      onPress={() => navigation.navigate(ROUTE_NAMES.MAIN_STACK)}
     >
       <ButtonText>BAŞLA!</ButtonText>
     </Button>

@@ -21,11 +21,12 @@ import Dialog, { DialogContent, DialogTitle } from 'react-native-popup-dialog';
 import {
   checkEmailAvailability,
   checkUsernameAvailability,
-  activeteUser,
+  activeteUser, hasAddress,
 } from '../../../../services/APIUtils';
 import { DefaultText } from './Common';
 import ButtonContent from './ButtonContent';
 import Input from './Input';
+import CONSTANTS from "~/utils/CONSTANTS";
 
 const Container = styled(View)`
   height: 100%;
@@ -362,7 +363,21 @@ class SignUp extends Component<Props, State> {
         AsyncStorage.setItem('accessToken', response.message);
 
         const { navigation  } = this.props;
-        navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
+        hasAddress(response.message)
+          .then((res) => {
+            debugger;
+            console.log("res >" + res);
+            if (!res) {
+              navigation.navigate(ROUTE_NAMES.ADDRESS, {
+                [CONSTANTS.COME_FROM_REGISTER]: true,
+              });
+            } else {
+              navigation.navigate(ROUTE_NAMES.MAIN_STACK);
+            }
+          })
+          .catch((error) => {
+            navigation.navigate(ROUTE_NAMES.ADDRESS);
+          });
 
       } else {
         this.setState({ smsValidatorMessage: 'Yanlış Kod' });

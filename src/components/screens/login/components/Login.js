@@ -13,7 +13,7 @@ import { ROUTE_NAMES } from '~/routes';
 
 import {
   activeteUser,
-  sendCode
+  sendCode,hasAddress
 } from '../../../../services/APIUtils';
 import { Alert, TYPES } from '~/components/common/alert';
 import Loading from '~/components/common/Loading';
@@ -371,12 +371,15 @@ class LoginComponent extends Component<Props, State> {
   }
 
   onInputCompleted = (otp) => {
+    debugger;
+    console.log(otp);
     activeteUser(otp, this.state.phone.value).then((response) => {
+      console.log(response);
       if (response && response.success === true) {
         this.setState({ smsValidationDialogVisible: false });
         this.setState({ smsValidatorMessage: 'Başarılı!' });
         AsyncStorage.setItem('accessToken', response.message);
-
+        debugger;
         const { navigation  } = this.props;
         navigation.navigate(ROUTE_NAMES.ONBOARDING_INTRO)
 
