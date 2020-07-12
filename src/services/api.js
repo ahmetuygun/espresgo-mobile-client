@@ -5,8 +5,8 @@ export const api = axios.create({
 });
 
 export const apiLogin = axios.create({
-  baseURL: 'http://espresgo-env.eba-s4fxtmbz.us-east-2.elasticbeanstalk.com//api',
+  baseURL: 'https://espresgo.herokuapp.com/api',
 });
 
-export const API_BASE_URL = 'http://espresgo-env.eba-s4fxtmbz.us-east-2.elasticbeanstalk.com/api';
+export const API_BASE_URL = 'https://espresgo.herokuapp.com/api';
 export const ACCESS_TOKEN = 'accessToken';

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "667683830429",
+    "firebase_url": "https://espresgo-e742e.firebaseio.com",
+    "project_id": "espresgo-e742e",
+    "storage_bucket": "espresgo-e742e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667683830429:android:fd58394dbcdab15c597274",
+        "android_client_info": {
+          "package_name": "com.bonappetitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "667683830429-ul5q7h5n1rk4pitg8fsmqc8o3j3bt35u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWSxI2OydpptJoa2czd3Xxgfia0jBw6z8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "667683830429-ul5q7h5n1rk4pitg8fsmqc8o3j3bt35u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "667683830429-8mn7qbnipscaaq9eb0lrk6a0sv66augt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Espresgo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
