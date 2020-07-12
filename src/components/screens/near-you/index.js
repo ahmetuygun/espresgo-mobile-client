@@ -60,16 +60,18 @@ class NearYouContainer extends Component<Props, State> {
 
   async componentDidMount() {
     const { requestVehicleLocation, setMyLocation } = this.props;
+    requestVehicleLocation();
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         // user location's latitude and longitude
         const latitude = parseFloat(position.coords.latitude);
         const longitude = parseFloat(position.coords.longitude);
+
         AsyncStorage.getItem('accessToken')
           .then((data) => {
             if (data) {
               console.log(data);
-              requestVehicleLocation(data);
               setMyLocation(
                 position.coords.latitude,
                 position.coords.longitude,

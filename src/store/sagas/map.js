@@ -15,7 +15,8 @@ export function* requestVehicleLocation(action) {
       headers,
     });
     yield put(MapActions.requestVehicleLocationSuccess(response.data));
-  } catch (err) {
+   } catch (err) {
+    console.log("error>"+err)
     yield put(MapActions.requestVehicleLocationFailure(err));
   }
 }
@@ -39,7 +40,8 @@ export function* setMyLocation(action) {
       { headers },
     );
     yield put(MapActions.setMyLocationSuccess(response.data));
-  } catch (err) {
+   } catch (err) {
+    console.log("error>"+err)
     yield put(MapActions.setMyLocationFailure(err));
   }
 }

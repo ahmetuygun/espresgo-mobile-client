@@ -19,6 +19,7 @@ const CONSTANTS = {
     longitude: -38.588988,
   },
   SEE_ALL_LIST: 'SEE_ALL_LIST',
+  COME_FROM_REGISTER: 'COME_FROM_REGISTER',
 };
 
 export default CONSTANTS;

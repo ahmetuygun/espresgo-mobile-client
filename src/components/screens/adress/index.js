@@ -41,6 +41,7 @@ class Address extends Component<Props, State> {
     this.selectCompany = this.selectCompany.bind(this);
 
 
+
     this.state = {
       update: false,
       isAdmin: false,
@@ -50,19 +51,23 @@ class Address extends Component<Props, State> {
       companies: [],
       selectedCity: {
         name: '',
-        id: ''
+        id: '',
+        error:''
       },
       selectedDistrict: {
         name: '',
-        id: ''
+        id: '',
+        error:''
       },
       selectedBuilding: {
         name: '',
-        id: ''
+        id: '',
+        error:''
       },
       selectedCompany: {
         name: '',
-        id: ''
+        id: '',
+        error:''
       },
       name: '',
       phone: '',
@@ -78,7 +83,8 @@ class Address extends Component<Props, State> {
       selectedCity: {
         ...this.state.selectedCity,
         name: data.filter(filterItem => filterItem.id === value).name,
-        id: value
+        id: value,
+        error: ''
       },
       selectedDistrict: {
         ...this.state.selectedDistrict,
@@ -113,7 +119,8 @@ class Address extends Component<Props, State> {
       selectedDistrict: {
         ...this.state.selectedDistrict,
         name: data.filter(filterItem => filterItem.id === value).name,
-        id: value
+        id: value,
+        error: ''
       },
       selectedBuilding: {
         ...this.state.selectedBuilding,
@@ -142,7 +149,8 @@ class Address extends Component<Props, State> {
       selectedBuilding: {
         ...this.state.selectedBuilding,
         name: data.filter(filterItem => filterItem.id === value).name,
-        id: value
+        id: value,
+        error: ''
       },
       selectedCompany: {
         ...this.state.selectedCompany,
@@ -155,7 +163,7 @@ class Address extends Component<Props, State> {
     getCompanyByBuilding(value)
       .then(response => {
         this.setState({
-          companies: response.list
+          companies: response.list,
         })
       }).catch(error => {
 
@@ -168,46 +176,71 @@ class Address extends Component<Props, State> {
       selectedCompany: {
         ...this.state.selectedCompany,
         name: data.filter(filterItem => filterItem.id === value).name,
-        id: value
+        id: value,
+        error: ''
       }
     })
   }
 
   registerAddress(a) {
-    AsyncStorage.getItem('accessToken')
-      .then((data) => {
-        if (data) {
-          const {registerAdress} = this.props;
-          registerAdress(this.state.selectedCity.id,
-            this.state.selectedDistrict.id,
-            this.state.selectedBuilding.id,
-            this.state.selectedCompany.id,
-            this.state.name,
-            this.state.phone,
-            this.state.email,
-            this.state.addressDesciption,
-            data);
 
-          this.setState({
-            update: true
-          })
-        }
-      })
-      .catch((err) => {
-      })
-  }
+    if (!this.state.selectedCity.id
+      || !this.state.selectedDistrict.id
+      || !this.state.selectedBuilding.id
+      || !this.state.selectedCompany.id) {
+      debugger;
+      if (!this.state.selectedCity.id) {
+        this.setState({
+          selectedCity: {
+            ...this.state.selectedCity,
+            error: 'İl seçimi'
+          }
+        })
+      }
+      if (!this.state.selectedDistrict.id) {
+        this.setState({
+          selectedDistrict: {
+            ...this.state.selectedDistrict,
+            error: 'İlçe seçimi'
+          }
+        })
+      }
 
+      if (!this.state.selectedBuilding.id) {
+        this.setState({
+          selectedBuilding: {
+            ...this.state.selectedBuilding,
+            error: 'Bina seçimi'
+          }
+        })
+      }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.update === false && nextState.update === true) {
-      const {getUserDetail} = this.props;
+      if (!this.state.selectedCompany.id) {
+        this.setState({
+          selectedCompany: {
+            ...this.state.selectedCompany,
+            error: 'Şirket şeçimi'
+          }
+        })
+      }
+
+    } else {
       AsyncStorage.getItem('accessToken')
         .then((data) => {
           if (data) {
-            getUserDetail(data);
-            this.setState({
-              update: false
-            })
+            const {registerAdress,getUserDetail} = this.props;
+            registerAdress(this.state.selectedCity.id,
+              this.state.selectedDistrict.id,
+              this.state.selectedBuilding.id,
+              this.state.selectedCompany.id,
+              this.state.name,
+              this.state.phone,
+              this.state.email,
+              this.state.addressDesciption,
+              data);
+
+          } else {
+            navigation.navigate(ROUTE_NAMES.LOGIN);
           }
         })
         .catch((err) => {
@@ -217,14 +250,17 @@ class Address extends Component<Props, State> {
 
   componentDidMount() {
 
-    const {getUserDetail} = this.props;
+    const {getUserDetail,navigation} = this.props;
     AsyncStorage.getItem('accessToken')
       .then((data) => {
         if (data) {
           getUserDetail(data);
+        }else{
+          navigation.navigate(ROUTE_NAMES.LOGIN);
         }
       })
       .catch((err) => {
+        navigation.navigate(ROUTE_NAMES.LOGIN);
       })
 
 
@@ -240,14 +276,33 @@ class Address extends Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
+    const {navigation,getUserDetail} = this.props;
 
-    const {registered, loading, userDetail} = nextProps.adress;
-    if (!loading && registered) {
-      const {navigation} = this.props;
-      navigation.navigate(ROUTE_NAMES.MAIN_STACK)
+    debugger;
+    const {registered,loadingAddress, loadingUserDetail, userDetail} = nextProps.adress;
+
+    if(!(loadingUserDetail || loadingAddress) && registered ){
+
+
+      navigation.goBack(null);
+      navigation.navigate(ROUTE_NAMES.MAIN_STACK);
+
+      AsyncStorage.getItem('accessToken')
+        .then((data) => {
+          if (data) {
+            getUserDetail(data);
+          }else{
+            navigation.navigate(ROUTE_NAMES.LOGIN);
+          }
+        })
+        .catch((err) => {
+          navigation.navigate(ROUTE_NAMES.LOGIN);
+        })
+
     }
 
-    if (!loading && userDetail.userPrincipal) {
+
+    if (!(loadingUserDetail || loadingAddress) && userDetail.userPrincipal) {
 
       if (userDetail.userPrincipal.authorities) {
         userDetail.userPrincipal.authorities.map(item => {
@@ -258,8 +313,6 @@ class Address extends Component<Props, State> {
           }
         })
       }
-
-
       this.setState({
         name: userDetail.userPrincipal.name,
         phone: userDetail.userPrincipal.username,
@@ -267,7 +320,7 @@ class Address extends Component<Props, State> {
       })
     }
 
-    if (!loading && userDetail.address) {
+    if (!(loadingUserDetail || loadingAddress)  && userDetail.address) {
 
       this.setState({
         selectedCity: {
@@ -307,6 +360,7 @@ class Address extends Component<Props, State> {
   ): Object => (
     <Dropdown
       value={selectedName.name}
+      error = {selectedName.error}
       onChangeText={selectFunction}
       label={label}
       valueExtractor={({id}) => id}
@@ -433,16 +487,16 @@ class Address extends Component<Props, State> {
 
   render() {
 
-    const {loading, error} = this.props.adress;
+    const {loadingUserDetail, error,loadingAddress} = this.props.adress;
     const {isAdmin} = this.state;
 
     return (
       <Container>
-        {loading && <Loading/>}
+        {(loadingUserDetail || loadingAddress ) && <Loading/>}
         {error && <Alert
           type={TYPES.ERROR_SERVER_CONNECTION}/>}
 
-        {!loading
+        {!(loadingUserDetail || loadingAddress )
         && !error && this.renderMain(isAdmin)}
 
       </Container>
